@@ -1,0 +1,115 @@
+{% extends 'header.html' %} {% load static %} {% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        color: black;
+        font-weight: bold;
+      }
+
+      th,
+      td {
+        padding: 10px;
+      }
+
+      table#alter tr:nth-child(even) {
+        background-color: #eee;
+      }
+
+      table#alter tr:nth-child(odd) {
+        background-color: #fff;
+      }
+
+      table#alter th {
+        color: white;
+        background-color: gray;
+      }
+    </style>
+    <!-- <script type="text/javascript">
+      function printingdata() {
+        var print_div = document.getElementById("hello");
+        var print_area = window.open();
+        print_area.document.write(print_div.innerHTML);
+        print_area.document.close();
+        print_area.focus();
+        print_area.print();
+        // print_area.close();
+        // This is the code print a particular div element
+      }
+    </script> -->
+  </head>
+
+  <body>
+    <h1>All NRGP Details</h1>
+    <h3>
+      <li><a href="{% url 'back' %}">Home</a></li>
+    </h3>
+
+    <hr />
+    <!-- hr tag for horizontal line-->
+    <table id="alter">
+      <tr>
+        <th>Concern Person Name</th>
+        <th>Department Name</th>
+        <th>Service Provider Name</th>
+        <th>Description</th>
+        <th>Unit</th>
+        <th>Quantity</th>
+        <th>Remarks</th>
+        <th>Date</th>
+        <th>Print</th>
+      </tr>
+      {% for i in log_data %}
+
+      <tr>
+        <td>{{i.cpname}}</td>
+        <td>{{i.dpname}}</td>
+        <td>{{i.spname}}</td>
+        <td>{{i.desc}}</td>
+        <td>{{i.unit}}</td>
+        <td>{{i.qty}}</td>
+        <td>{{i.remarks}}</td>
+        
+        <td>{{i.date}}</td>
+        <!-- <div id="hello" hidden>
+          <pre>Name  :  {{i.fname}} {{i.lname}}</pre>
+          <pre>Email  :{{i.email}}</pre>
+          <pre>Emp Code  :{{i.emp_code}}</pre>
+          <pre>Reason:   {{i.reason}}</pre>
+          <pre>Amount   :  {{i.amount}} </pre>
+          <pre>Time  :  {{i.date}} </pre>
+        </div> -->
+        <td>
+          <button
+            style="
+              background-color: #15161d;
+              border-radius: 20px;
+              border: 1px solid black;
+            "
+          >
+            <a
+              style="font-weight: bold; color: rgb(248, 248, 248)"
+              href="{% url 'nrgp_print' i.id %}"
+              target="_blank"
+              >Print</a
+            >
+          </button>
+          <!-- <input
+            type="button"
+            value="Print"
+            class="primary-btn order-submit"
+            onclick="printingdata()"
+          /> -->
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
+{% endblock %}

@@ -1,0 +1,20 @@
+1) 
+
+2) Prepared, verified and approve by name require on print template. ( also date and time require)
+
+3) multiple item name and qty require on RGP creation and print template.
+
+4) date formate require in DD/MM/YYYY and time formate should be 24 hours.
+
+5) approve and verified link send on mail with item description.
+
+6) approver person can be approve and reject gate pass & verified person can verified RGP gate pass.
+
+7) gate pass can not be show one department to another department, only showing own department gatepass.
+
+8) transection uniqe number require on print template.( require unique number for all department and it will be change in every year )
+
+9) NRGP should be close while submit uotward.
+
+
+

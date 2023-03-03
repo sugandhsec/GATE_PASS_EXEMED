@@ -1,0 +1,164 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        .duplicate-row {
+            margin-top: 50px;
+            position: relative;
+            padding-right: 70px;
+        }
+
+        .duplicate-row .btn-remove {
+            position: absolute;
+            right: 0;
+            top: 30px;
+            font-family: fontawesome;
+        }
+    </style>
+</head>
+
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="breadcrumb-header">Returnable Gate Pass Enrollment</h3>
+                <ul class="breadcrumb-tree">
+                    <li><a href="{% url 'back' %}">Home</a></li>
+
+                </ul>
+
+            </div>
+        </div>
+        <!-- /row -->
+
+    </div>
+    <!-- /container -->
+    {% if msg %}
+    <b style="color: blue;">{{msg}}</b>
+    {% endif %}
+</div>
+
+<!-- /BREADCRUMB -->
+
+<!-- SECTION -->
+<div class="container">
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="top_set">
+                <form name="rgp_signup" method="post" action="{% url 'rgp_signup' %}" enctype="multipart/form-data"
+                    onsubmit="printingdata()">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="text" name="cpname" id="val_fname"
+                            placeholder="Name of Concern Person" required>
+
+
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="text" name="dpname" id="val_surname" placeholder="Name of Department"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="text" name="spname" id="val_surname"
+                            placeholder="Service Provider Name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input class="input" type="text" name="remarks" id="val_reason" placeholder="Remarks" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" value="Add More" class="btn btn-primary" id="addmorebtn" />
+                    </div>
+
+                    <div class="MutipleRecord">
+                        <div class="row duplicate-row">
+                            <input type="button" value="&#xf014;" class="btn btn-danger btn-remove" />
+                            <div class="form-group">
+                                <input class="input" type="text" name="desc" id="val_surname"
+                                    placeholder="Item Description" required>
+                            </div>
+                            <select name="unit">
+                                <option>---Select Unit---</option>
+                                <option>NOS</option>
+
+                                <option>KG</option>
+                                <option>SET</option>
+                            </select>
+                            <br><br>
+                            <div class="form-group">
+                                <input class="input" type="text" name="qty" placeholder="Quantity" required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <button type="submit" class="primary-btn order-submit">Submit </button>
+                    <a href="{% url 'back' %}"><button type="button"
+                            class="primary-btn order-submit">Back</button></a><br><br>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- /SECTION -->
+
+
+<script>
+    $("#email").change(function () {
+        var email = $(this).val();
+
+        $.ajax({
+            url: '/ajax/validate_email/',
+            data: {
+                'email': email
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (!data.is_taken) {
+                    document.getElementById("email").style.border = "5px solid red";
+                    document.getElementById("email_error").innerHTML = "Email Id Already Registered";
+                } else {
+                    document.getElementById("email").style.border = "5px solid green";
+                    document.getElementById("email_error").innerHTML = "";
+                }
+            }
+        });
+    });
+
+</script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#addmorebtn").click(function () {
+            $(".MutipleRecord .duplicate-row:last-child").clone().appendTo(".MutipleRecord");
+        });
+
+        $(document).on('click', '.btn-remove', function () {
+            if ($(".MutipleRecord .duplicate-row").length > 1) {
+                $(this).parents(".duplicate-row").remove();
+            }
+        });
+
+    });
+</script>
+
+</body>
+
+</html>
+{% endblock %}

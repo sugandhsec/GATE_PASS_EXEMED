@@ -1,0 +1,312 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<style>
+		.duplicate-row {
+			margin-top: 50px;
+			position: relative;
+			padding-right: 70px;
+		}
+
+		.duplicate-row .btn-remove {
+			position: absolute;
+			right: 0;
+			top: 30px;
+			font-family: fontawesome;
+		}
+	</style>
+</head>
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="breadcrumb-header">Returnable Gate Pass Enrollment</h3>
+				<ul class="breadcrumb-tree">
+					<li><a href="{% url 'back' %}">Home</a></li>
+
+				</ul>
+
+			</div>
+		</div>
+		<!-- /row -->
+
+	</div>
+	<!-- /container -->
+	{% if msg %}
+	<b style="color: blue;">{{msg}}</b>
+	{% endif %}
+</div>
+
+<!-- /BREADCRUMB -->
+
+<!-- SECTION -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+
+			<div class="col-md-7">
+				<!-- Billing Details -->
+				<div class="billing-details">
+					<div class="section-title">
+
+					</div>
+
+					<!-- ------TEMP DIV------------------- -->
+					<div class="top_set">
+						<form name="rgp_signup" method="post" action="{% url 'rgp_signup' %}"
+							enctype="multipart/form-data" onsubmit="printingdata()">
+							{% csrf_token %}
+
+							<div class="form-group">
+
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="cpname" id="val_fname"
+									placeholder="Name of Concern Person" required>
+
+
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="dpname" id="val_surname"
+									placeholder="Name of Department" required>
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="spname" id="val_surname"
+									placeholder="Service Provider Name" required>
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="remarks" id="val_reason" placeholder="Remarks"
+									required>
+							</div>
+
+							<div class="form-group">
+								<input type="button" value="Add More" class="btn btn-primary" id="addmorebtn" />
+							</div>
+
+							<div class="MutipleRecord">
+								<div class="row duplicate-row">
+									<input type="button" value="&#xf014;" class="btn btn-danger btn-remove" />
+									<div class="form-group">
+										<input class="input" type="text" name="desc" id="val_surname"
+											placeholder="Item Description" multiple required>
+									</div>
+									<select name="unit">
+										<option>---Select Unit---</option>
+										<option>NOS</option>
+
+										<option>KG</option>
+										<option>SET</option>
+									</select>
+									<br><br>
+									<div class="form-group">
+										<input class="input" type="text" name="qty" placeholder="Quantity" required>
+									</div>
+								</div>
+
+							</div>
+							<!-- <tr align="center">
+							<td>Gender</td>
+							<td><input type="radio" value="male" name="gender" required>Male
+							<td><input type="radio" value="female" name="gender" required>Female
+							</td>  -->
+							<br>
+
+							<!--<td>Entry Status</td>
+							<td><input type="radio" value="in" name="entry">In
+							<!--<td><input type="radio" value="exit" name="entry">Exit-->
+							<!-- </td>
+							
+							
+							
+							<div class="form-group">
+								<input class="input" type="text" name="cname" placeholder="Company Name" required>
+							</div>
+							<div class="form-group">
+								<input class="input" type="tel" name="purpose" placeholder="Purpose" required>
+							</div> -->
+
+							<!-- <div class="form-group">
+								
+								<input class="input" type="text" name="tosee" placeholder="To See" required>
+							</div> -->
+
+
+
+							<!-- <div class="form-group">
+								
+								<input class="input" type="text" name="todepartment" placeholder="To Department" required>
+							</div> -->
+							<div class="form-group">
+
+
+							</div>
+
+							<button type="submit" class="primary-btn order-submit">Submit </button>
+							<a href="{% url 'back' %}"><button type="button"
+									class="primary-btn order-submit">Back</button></a><br><br>
+
+
+					</div>
+					<!-- -----------temp div over------- -->
+				</div>
+
+				<script type="text/javascript">
+
+					function printingdata() {
+						var today = new Date();
+						document.getElementById('time_show').innerHTML = today
+						var print_div = document.getElementById("hello");
+						var username = document.getElementById("val_fname").value;
+						document.getElementById("myname").innerHTML = username;
+						var usersurname = document.getElementById("val_surname").value;
+						document.getElementById("mysurname").innerHTML = usersurname;
+						var usercode = document.getElementById("val_code").value;
+						document.getElementById("mycode").innerHTML = usercode;
+						var useramount = document.getElementById("val_amount").value;
+						document.getElementById("myamount").innerHTML = useramount;
+						var userreason = document.getElementById("val_reason").value;
+						document.getElementById("myreason").innerHTML = userreason;
+						var print_area = window.open();
+						print_area.document.write(print_div.innerHTML);
+						print_area.document.close();
+
+						print_area.focus();
+						print_area.print();
+						// print_area.close();
+						// This is the code print a particular div element
+					}
+
+				</script>
+				<div id="hello" hidden>
+					<div class="col-md-6">
+						<strong>Receipt </strong><br>
+						<div class="table-responsive">
+							<table class="table table-user-information">
+								<tbody>
+									<tr>
+										<td>
+											<strong>
+												<span class="glyphicon glyphicon-asterisk text-primary"></span>
+												Name
+											</strong>
+										</td>
+										<td class="text-primary">
+											<span id="myname"></span><span id="mysurname"></span>
+
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<strong>
+												<span class="glyphicon glyphicon-asterisk text-primary"></span>
+												Emp Code
+											</strong>
+										</td>
+										<td class="text-primary">
+											<span id="mycode"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<strong>
+												<span class="glyphicon glyphicon-asterisk text-primary"></span>
+												Amount
+											</strong>
+										</td>
+										<td class="text-primary">
+											<span id="myamount"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<strong>
+												<span class="glyphicon glyphicon-asterisk text-primary"></span>
+												Time
+											</strong>
+										</td>
+										<td class="text-primary">
+											<span id="time_show"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<strong>
+												<span class="glyphicon glyphicon-asterisk text-primary"></span>
+												Reason
+											</strong>
+										</td>
+										<td class="text-primary">
+											<span id="myreason"></span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+
+
+<script>
+	$("#email").change(function () {
+		var email = $(this).val();
+
+		$.ajax({
+			url: '/ajax/validate_email/',
+			data: {
+				'email': email
+			},
+			dataType: 'json',
+			success: function (data) {
+				if (!data.is_taken) {
+					document.getElementById("email").style.border = "5px solid red";
+					document.getElementById("email_error").innerHTML = "Email Id Already Registered";
+				} else {
+					document.getElementById("email").style.border = "5px solid green";
+					document.getElementById("email_error").innerHTML = "";
+				}
+			}
+		});
+	});
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function () {
+		$("#addmorebtn").click(function () {
+			$(".MutipleRecord .duplicate-row:last-child").clone().appendTo(".MutipleRecord");
+		});
+
+		$(document).on('click', '.btn-remove', function () {
+			if ($(".MutipleRecord .duplicate-row").length > 1) {
+				$(this).parents(".duplicate-row").remove();
+			}
+		});
+
+	});
+</script>
+
+</body>
+
+</html>
+{% endblock %}

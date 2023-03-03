@@ -1,0 +1,135 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+</head>
+
+<body>
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb" class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<div class="col-md-12">
+					<!--<h3 class="breadcrumb-header">Login</h3>
+						<ul class="breadcrumb-tree">
+							<li><a href="#">Home</a></li>-->
+					<!--<li class="active">Login</li>-->
+					</ul>
+				</div>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- -----------------temp sec created-------------------- -->
+	<section class="bkg_main">
+		<!-- <a href="#" class="bkg_img">
+			<img src="{% static 'img/plant.png' %}" alt="">
+		</a> -->
+		<img src="{% static 'img/plant.png' %}" alt="" style="            width: 1089px;
+    height: 509px;
+    margin-left: 260px;
+    margin-top: -26px;
+    margin-bottom: -496px;
+	opacity: 0.4;
+    ">
+		<div class="leftnav">
+			<!-- SECTION -->
+			<div class="section">
+				<!-- container -->
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+
+						<div class="col-md-7">
+							<!-- Billing Details -->
+							<div class="billing-details">
+								<div class="section-title">
+									<!-- <h3 class="title">Welcome</h3> -->
+									<div class="wel">Welcome</div>
+								</div>
+								{% if msg %}
+								<b style="color:blue;">{{msg}}</b>
+								{% endif %}
+								<span id="email_error"></span>
+								<!--<form name="login" method="post" action="{% url 'login' %}">-->
+								{% csrf_token %}
+
+								<!--<div class="form-group">
+								<input class="input" type="email" name="email" placeholder="Email" id="email">
+							</div>
+							<div class="form-group">
+								<input class="input" type="password" name="password" placeholder="Password">
+							</div>-->
+
+								<!--<button type="submit" class="primary-btn order-submit">New Visitor Entry</button>-->
+								<br><br>
+								<a href="{% url 'rgp_view_operator' %}"><button type="button"
+										class="primary1-btn order-submit">RGP Outward & Inward</button></a><br><br>
+
+								<a href="{% url 'nrgp_view_operator' %}"><button type="button"
+										class="primary1-btn order-submit">NRGP Outward</button></a><br><br>
+
+								
+
+								<!-- <img src="" alt=""> -->
+							</div>
+							<!-- /Billing Details -->
+
+
+
+
+						</div>
+
+					</div>
+					<!-- /row -->
+				</div>
+				<!-- /container -->
+			</div>
+			<!-- /SECTION -->
+		</div>
+
+		<!-- <div class="bkg_img">
+		
+			<img src="{% static 'img/plant.png' %}" alt="">
+		
+		</div> -->
+	</section>
+	<!-- ------------------section over-------------------------- -->
+
+	<script>
+		$("#email").change(function () {
+			var email = $(this).val();
+
+			$.ajax({
+				url: '/ajax/validate_email/',
+				data: {
+					'email': email
+				},
+				dataType: 'json',
+				success: function (data) {
+					if (!data.is_taken) {
+						document.getElementById("email").style.border = "5px solid red";
+						document.getElementById("email_error").innerHTML = "This Email Id Not Registered";
+					} else {
+						document.getElementById("email").style.border = "5px solid green";
+						document.getElementById("email_error").innerHTML = "";
+					}
+				}
+			});
+		});
+
+	</script>
+</body>
+
+</html>
+{% endblock %}

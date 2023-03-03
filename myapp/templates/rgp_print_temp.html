@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <style>
+    button {
+      appearance: none;
+      background-color: #2ea44f;
+      border: 1px solid rgba(27, 31, 35, 0.15);
+      border-radius: 6px;
+      box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
+      box-sizing: border-box;
+      color: #fff;
+      cursor: pointer;
+      display: inline-block;
+      font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+        sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      padding: 6px 16px;
+      position: relative;
+      text-align: center;
+      text-decoration: none;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    @media print {
+      body * {
+        display: none;
+      }
+
+      #hello,
+      #hello * {
+        display: block;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div id="hello">
+    <div class="col-md-6">
+      <strong>
+        <h4>Exemed Pharmaceuticals, Vapi
+        </h4>
+        <h6>Plot No. 133/1 & 133/2,GIDC,Selvas Road,
+          Vapi-396 195
+        </h6><br>
+      </strong>
+      <div class="table-responsive">
+        <table class="table table-hover table-user-information">
+          <tbody>
+            <tr>
+              <td>
+                <strong>
+                  <span class="glyphicon glyphicon-asterisk text-primary"></span>
+                  Concern Person Name
+                </strong>
+              </td>
+              <td class="text-primary">
+                {{user_det.cpname}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>
+                  <span class="glyphicon glyphicon-asterisk text-primary"></span>
+                  Department Name
+                </strong>
+              </td>
+              <td class="text-primary">{{user_det.dpname}}</td>
+            </tr>
+
+            <tr>
+              <td>
+                <strong>
+                  <span class="glyphicon glyphicon-asterisk text-primary"></span>
+                  Service Provider Name
+                </strong>
+              </td>
+              <td class="text-primary">
+                <span id="myamount">{{user_det.spname}}</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>
+                  <span class="glyphicon glyphicon-asterisk text-primary"></span>
+                  Description
+                </strong>
+              </td>
+              <td class="text-primary">{{user_det.desc}}</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>
+
+                  <span class="glyphicon glyphicon-asterisk text-primary"></span>
+                  Quantity
+                </strong>
+              </td>
+              <td class="text-primary">
+                {{user_det.qty}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>
+
+                  <span class="glyphicon glyphicon-asterisk text-primary"></span>
+                  Remarks
+                </strong>
+              </td>
+              <td class="text-primary">
+                {{user_det.remarks}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>
+
+
+
+                  <span class="glyphicon glyphicon-asterisk text-primary"></span>
+                  Time
+                </strong>
+              </td>
+              <td class="text-primary">{{user_det.date}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <br>
+  <button onclick="printingdata()">Print</button>
+</body>
+<script type="text/javascript">
+  // function printingdata() {
+  //   var print_div = document.getElementById("hello");
+  //   var print_area = window.open("");
+  //   // print_area.document.write(print_div.innerHTML);
+  //   print_area.body.innerHTML =
+  //     "<html><head><title></title></head><body>" +
+  //     print_div + "</body>";
+  //   // print_area.document.close();
+  //   // print_area.focus();
+  //   print_area.print();
+  //   // print_area.close();
+  //   // This is the code print a particular div element
+  // }
+
+  function printingdata() {
+    print();
+  }
+</script>
+
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <style>
+    button {
+      appearance: none;
+      background-color: #2ea44f;
+      border: 1px solid rgba(27, 31, 35, 0.15);
+      border-radius: 6px;
+      box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
+      box-sizing: border-box;
+      color: #fff;
+      cursor: pointer;
+      display: inline-block;
+      font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+        sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      padding: 6px 16px;
+      position: relative;
+      text-align: center;
+      text-decoration: none;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    @media print {
+      body * {
+        display: none;
+      }
+
+      #hello,
+      #hello * {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+   
+    <table border="1px" cellpadding="8px" cellspacing="0" align="center">   <!--1.cellpadding - for cell inner space , 2.cellspacing - for cell outer space , 3. align="center" for table alignment-->
+        <tr>  <!--1 Row-->
+            <th colspan="5" class="text-primary">EXEMED PHARMACEUTICALS<p style="font-size: 15px;">Plot No.133/1 & 133/2, Selvas Road, GIDC, VAPI. Tel:-91 2606617700</p>
+                
+            </th>
+            
+            
+        </tr>
+        <tr>  <!--2 Row-->
+            <th colspan="5">DELIVERY CHALLAN CUM RETURNABLE GATE PASS
+            
+            </th>
+            <!-- <td colspan="2"></td>      <!--colspan for column merge & rowspan for row merge-->
+           <!-- <td>weakup</td> - --> -->
+        </tr>
+        <tr>  <!--3 Row-->
+            <td colspan="2">R. G. P. No:-
+            
+            </td>
+            <td colspan="3">Date & Time:- {{user_det.date}}
+            
+            </td>
+            
+           
+        </tr>
+        <tr>  <!--4 Row-->
+            <td colspan="5">NAME OF THE CONCERN PERSON :- {{user_det.cpname}}
+            
+            </td>
+            
+        </tr>
+        <tr>  <!--5 Row-->
+        <td colspan="5">NAME OF THE DEPARTMENT :- {{user_det.dpname}}
+        
+        </td>
+        </tr>
+        <tr>  <!--6 Row-->         <!-- align="center" for text alignment in row and column also can whole table alignment  -->
+        <td colspan="5">SERVICE PROVIDER NAME:- {{user_det.spname}}
+        
+        </td>
+        </tr>
+        <tr>  <!--7 Row-->
+            <th>SR.No.</th>
+            <th>DESCRIPTION</th>
+            <th>UNIT</th>
+            <th>QTY.</th>
+            <th>REMARKS</th>
+           <!-- <td>Science</td>
+            <td>Science</td> -->
+        </tr>
+        <tr>  <!--8 Row-->
+            <th></th>
+            <th>{{user_det.desc}}</th>
+            <th>{{user_det.unit}}</th>
+            <th>{{user_det.qty}}</th>
+            <th>{{user_det.remarks}}</th>
+        </tr>
+        <tr> <!--8 Row-->
+            <td colspan="2">Prepared By:-
+            
+            </td>
+            <td colspan="1">Verified By:-
+            
+            </td>
+            <td colspan="2">Approved By:-
+            
+            </td>
+        </tr>
+
+    </table>
+    <button onclick="printingdata()">Print</button>
+</body>
+<script type="text/javascript">
+  // function printingdata() {
+  //   var print_div = document.getElementById("hello");
+  //   var print_area = window.open("");
+  //   // print_area.document.write(print_div.innerHTML);
+  //   print_area.body.innerHTML =
+  //     "<html><head><title></title></head><body>" +
+  //     print_div + "</body>";
+  //   // print_area.document.close();
+  //   // print_area.focus();
+  //   print_area.print();
+  //   // print_area.close();
+  //   // This is the code print a particular div element
+  // }
+
+  function printingdata() {
+    print();
+  }
+</script>
+</html>
