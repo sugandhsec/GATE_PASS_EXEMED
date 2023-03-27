@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-5cvq7burpvlupg2b^*j%bifx74%k%vd$k+-_g$-1&_e=r&3%+4
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-#'172.24.8.15'
+# '172.24.8.15'
 ALLOWED_HOSTS = []
 
 
@@ -139,10 +139,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'exemedit@gmail.com'
-EMAIL_HOST_PASSWORD = 'wgpnskcspccyomnj'
+EMAIL_HOST_USER = 'sugandhmain1122000@gmail.com'
+EMAIL_HOST_PASSWORD = 'uzfiahroiocbytsq'
 
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 PAYTM_MERCHANT_ID = 'wWVcFM74735574556459'

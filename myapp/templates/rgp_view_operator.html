@@ -51,13 +51,13 @@
 		</div>
 		<center style="color:red">{{msg}}</center>
 	</h4>
-	
+
 	<!-- ----------------temp div-------- -->
 	<div class="table_data">
-		
+
 		<table id="alter">
 			<tr>
-				
+
 				<th>Concern Person Name</th>
 				<th>Department Name</th>
 				<th>Service Provider Name</th>
@@ -66,14 +66,16 @@
 				<th>Quantity</th>
 				<th>Remarks</th>
 				<th>RGP Outward</th>
+				<th>Outward Staus</th>
 				<th>RGP Inward</th>
+				<th>Inward Status</th>
 				<th>Send Mail</th>
-				
+
 			</tr>
 			{% for i in rgp_entrys %}
 
-			
-			<form action="{% url 'rgp_outward' %}" method="post">
+
+			<form action="" method="post">
 				{% csrf_token %}
 				<tr>
 					<td> {{i.cpname}}</td>
@@ -82,14 +84,24 @@
 					<td>{{i.desc}} </td>
 					<td>{{i.unit}} </td>
 					<td>{{i.qty}} </td>
-					
+
 					<td>{{i.remarks}} </td>
-					<td><button type="submit" class="primary-btn order-submit">RGP Outward </button> </td>
-					<td><a href="{% url 'rgp_inward' %}"><button type="button"
-								class="primary-btn order-submit">RGP Inward</button></a> </td>
-					<td><a href="{% url 'send_email' i.id %}"><button type="button" class="primary-btn order-submit">Send
+					<td><a href="{% url 'rgp_outward' i.id %}"><button type="button"
+								class="primary-btn order-submit">RGP
+								Outward </button></a> </td>
+					<td>{{i.outward_status}} </td>
+					{% if i.outward_status %}
+					<td><a href="{% url 'rgp_inward' i.id %}"><button type="button" class="primary-btn order-submit">RGP
+								Inward</button></a> </td>
+					{% else %}
+					<td><a href="{% url 'rgp_inward' i.id %}"><button type="button" class="primary-btn order-submit"
+								disabled>RGP
+								Inward</button></a> </td>
+					{% endif %}
+					<td>{{i.inward_status}} </td>
+					<td><a href="{% url 'send_email' i.id %}"><button type="button"
+								class="primary-btn order-submit">Send
 								Mail</button></a> </td>
-					
 					<br>
 					<!-- <div><button onClick="window.print()">Print this page</button></div> -->
 

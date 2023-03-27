@@ -1,3 +1,5 @@
+from django.http import HttpResponse
+import datetime
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
@@ -105,49 +107,55 @@ def logout(request):
 
 @csrf_exempt
 def rgp_signup(request):
-    user=User_rgp.objects.get(email=request.session['email'])
+    user = User_rgp.objects.get(email=request.session['email'])
     if request.method == "POST":
-        descript=request.POST.getlist('desc')
-        quantity=request.POST.getlist('qty')
-        unit=request.POST.getlist('unit')
-        for i in range(0,len(descript)):
+        descript = request.POST.getlist('desc')
+        quantity = request.POST.getlist('qty')
+        unit = request.POST.getlist('unit')
+        for i in range(0, len(descript)):
+            series = serial_generate(request)
             Rgp_entry.objects.create(
-                    cpname=request.POST['cpname'],
-                    spname=request.POST['spname'],
-                    dpname=request.POST['dpname'],
-                    desc=descript[i],
-                    qty=quantity[i],
-                    unit=unit[i],
-                    remarks=request.POST['remarks'],
-                )
-            
+                rgp_serial=series,
+                rgp_created=user,
+                cpname=request.POST['cpname'],
+                spname=request.POST['spname'],
+                dpname=request.POST['dpname'],
+                desc=descript[i],
+                qty=quantity[i],
+                unit=unit[i],
+                remarks=request.POST['remarks'],
+            )
         msg = "RGP Enrollment Successfully"
         return render(request, 'rgp_entry.html', {'msg': msg})
 
     else:
         msg = ""
         return render(request, 'rgp_entry.html', {'msg': msg})
-    
+
+
+@csrf_exempt
 def nrgp_signup(request):
-    user=User_rgp.objects.get(email=request.session['email'])
+    user = User_rgp.objects.get(email=request.session['email'])
     if request.method == "POST":
         descript = request.POST.getlist('desc')
         quantity = request.POST.getlist('qty')
         unit = request.POST.getlist('unit')
         for i in range(0, len(descript)):
+            series = serial_generate_nrgp(request)
             Nrgp_entry.objects.create(
-                    cpname=request.POST['cpname'],
-                    spname=request.POST['spname'],
-                    desc=request.POST['desc'],
-                    dpname=request.POST['dpname'],
-                    unit=request.POST['unit'],
-                    qty=request.POST['qty'],
-                    remarks=request.POST['remarks'],
-                )
-            
+                nrgp_serial=series,
+                nrgp_created=user,
+                cpname=request.POST['cpname'],
+                spname=request.POST['spname'],
+                dpname=request.POST['dpname'],
+                desc=descript[i],
+                qty=quantity[i],
+                unit=unit[i],
+                remarks=request.POST['remarks'],
+            )
+
         msg = "NRGP Enrollment Successfully"
         return render(request, 'nrgp_entry.html', {'msg': msg})
-
     else:
         msg = ""
         return render(request, 'nrgp_entry.html', {'msg': msg})
@@ -176,7 +184,7 @@ def back(request):
 
 def change_password(request):
     if request.method == "POST":
-        user = User.objects.get(email=request.session['email'])
+        user = User_rgp.objects.get(email=request.session['email'])
         if user.password == request.POST['old_password']:
             if request.POST['new_password'] == request.POST['cnew_password']:
                 user.password = request.POST['new_password']
@@ -207,51 +215,59 @@ def new_password(request):
     else:
         msg = "New Password & Confirm New Password Does Not Matched"
         return render(request, 'new_password.html', {'email': email, 'msg': msg})
-    
+
+
 def rgp_view(request):
-    # if request.method=="POST":
-    rgp_entrys=Rgp_entry.objects.filter(current_status="Entry")
-    return render(request,'rgp_view.html' ,{'rgp_entrys':rgp_entrys})
-    # else:
-	# 	rgp_entrys=Rgp_entry.objects.all()#.order_by('-id')[:3]
-	#     return render(request,'visitor_view.html' ,{'rgp_entrys':rgp_entrys})
+    rgp_entrys = Rgp_entry.objects.filter(current_status="Entry")
+    return render(request, 'rgp_view.html', {'rgp_entrys': rgp_entrys})
+
 
 def rgp_view_operator(request):
-    # if request.method=="POST":
-    rgp_entrys=Rgp_entry.objects.filter(current_status="Entry")
-    return render(request,'rgp_view_operator.html' ,{'rgp_entrys':rgp_entrys})
+    rgp_entrys = Rgp_entry.objects.filter(
+        current_status="Entry", approve_status=True)
+    return render(request, 'rgp_view_operator.html', {'rgp_entrys': rgp_entrys})
+
 
 def rgp_exit(request, pk):
     all_in_user = Rgp_entry.objects.filter(current_status="Entry")
     if request.method == "POST":
-            rgp_entrys = Rgp_entry.objects.get(id=pk)
-            rgp_entrys.current_status = "Exit"
-            rgp_entrys.made_on = datetime.datetime.now()
-            rgp_entrys.save()
-            msg = "Exit Successfully"
-            return render(request, 'rgp_view.html', {'msg': msg, 'rgp_entrys': all_in_user})
+        rgp_entrys = Rgp_entry.objects.get(id=pk)
+        rgp_entrys.current_status = "Exit"
+        rgp_entrys.made_on = datetime.datetime.now()
+        rgp_entrys.save()
+        msg = "Exit Successfully"
+        return render(request, 'rgp_view.html', {'msg': msg, 'rgp_entrys': all_in_user})
     else:
         return render(request, 'rgp_view.html', {'rgp_entrys': all_in_user})
-    
+
+
+def nrgp_exit(request, pk):
+    all_in_user = Nrgp_entry.objects.filter(current_status="Entry")
+    if request.method == "POST":
+        nrgp_entrys = Nrgp_entry.objects.get(id=pk)
+        nrgp_entrys.current_status = "Exit"
+        nrgp_entrys.made_on = datetime.datetime.now()
+        nrgp_entrys.save()
+        msg = "Exit Successfully"
+        return render(request, 'nrgp_view.html', {'msg': msg, 'nrgp_entrys': all_in_user})
+    else:
+        return render(request, 'nrgp_view.html', {'nrgp_entrys': all_in_user})
+
+
 def rgp_print(request, pk):
     user_detail = Rgp_entry.objects.get(id=pk)
-    return render(request, 'rgp_print.html', {'user_det': user_detail})
+    return render(request, 'rgp_print.html', {'user_detail': user_detail})
+
 
 def nrgp_view(request):
     # if request.method=="POST":
-    nrgp_entrys=Nrgp_entry.objects.filter(current_status="Entry")
-    return render(request,'nrgp_view.html' ,{'nrgp_entrys':nrgp_entrys})
-
-
-
+    nrgp_entrys = Nrgp_entry.objects.filter(current_status="Entry")
+    return render(request, 'nrgp_view.html', {'nrgp_entrys': nrgp_entrys})
 
 
 def log_print(request, pk):
     user_detail = Rgp_entry.objects.get(id=pk)
     return render(request, 'log_print.html', {'user_det': user_detail})
-
-
-
 
 
 def update_view(request, id):
@@ -261,10 +277,9 @@ def update_view(request, id):
 
     # fetch the object related to passed id
     obj = get_object_or_404(Rgp_entry, Nrgp_entry, id=id)
-    
 
     # pass the object as instance in form
-    form = Rgp_entryForm , Nrgp_entry (request.POST or None, instance=obj)
+    form = Rgp_entryForm, Nrgp_entry(request.POST or None, instance=obj)
 
     # save the data from the form and
     # redirect to detail_view
@@ -276,31 +291,6 @@ def update_view(request, id):
     context["form"] = form
 
     return render(request, "update_view.html", context)
-
-# def update_view_nrgp(request, id):
-#     # dictionary for initial data with
-#     # field names as keys
-#     context = {}
-
-#     # fetch the object related to passed id
-#     obj = get_object_or_404(Nrgp_entry, id=id)
-
-#     # pass the object as instance in form
-#     form = Nrgp_entryForm(request.POST or None, instance=obj)
-
-#     # save the data from the form and
-#     # redirect to detail_view
-#     if form.is_valid():
-#         form.save()
-#         return HttpResponseRedirect("/"+id)
-
-#     # add form dictionary to context
-#     context["form"] = form
-
-#     return render(request, "update_view_nrgp.html", context)
-
-
-
 
 
 def send_email(request, pk):
@@ -318,21 +308,170 @@ def send_email(request, pk):
         return render(request, 'send_email.html', {'rgp_entrys': rgp_entrys})
 
 
+def nrgp_send_email(request, pk):
+    if request.method == "POST":
+        nrgp_entrys = Nrgp_entry.objects.get(id=pk)
+        subject = 'RGP Details'
+        message = f"Concern Person Name :- {nrgp_entrys.cpname}\n Department Name :- {nrgp_entrys.dpname}\n Service Provide Name:-{nrgp_entrys.spname}\n Description :- {nrgp_entrys.desc}\n Unit :- {nrgp_entrys.unit}\n Quantity  :- {nrgp_entrys.qty}\n Remarks  :- {nrgp_entrys.remarks}"
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [request.POST['email']]
+        send_mail(subject, message, email_from, recipient_list)
+        msg = "E-Mail Sent Successfully"
+        return render(request, 'nrgp_send_email.html', {'nrgp_entrys': nrgp_entrys, 'msg': msg})
+    else:
+        nrgp_entrys = Nrgp_entry.objects.get(id=pk)
+        return render(request, 'nrgp_send_email.html', {'nrgp_entrys': nrgp_entrys})
+
+
+def verify_link(request, pk, status):
+    rgp_data = Rgp_entry.objects.get(id=pk)
+    rgp_data.verify_status = bool(status)
+    rgp_data.save()
+    return render(request, "index.html")
+
+
+def nrgp_verify_link(request, pk, status):
+    rgp_data = Nrgp_entry.objects.get(id=pk)
+    rgp_data.nrgp_verify_status = bool(status)
+    rgp_data.save()
+    return render(request, "index.html")
+
+
+def send_email_verify(request, pk):
+    # user_data = User_rgp.objects.get(usertype="verifier")
+    user_data = User_rgp.objects.all()
+    if request.method == "POST":
+        rgp_entrys = Rgp_entry.objects.get(id=pk)
+        subject = 'RGP VERIFY'
+        message = f"""Concern Person Name :- {rgp_entrys.cpname}\n Department Name :- {rgp_entrys.dpname}\n Service Provide Name:-{rgp_entrys.spname}\n Description :- {rgp_entrys.desc}\n Unit :- {rgp_entrys.unit}\n Quantity  :- {rgp_entrys.qty}\n Remarks  :- {rgp_entrys.remarks}
+        
+        verify----"{request.get_host()}/verify_link/{pk}/1"
+
+        Not Verify----"{request.get_host()}/verify_link/{pk}/0"
+        
+        """
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [request.POST['email']]
+        send_mail(subject, message, email_from, recipient_list)
+        msg = "E-Mail Sent Successfully"
+        verifier_email = User_rgp.objects.get(email=request.POST['email'])
+        rgp_entrys.verifier = verifier_email
+        rgp_entrys.save()
+        return render(request, 'send_email_verify.html', {'rgp_entrys': rgp_entrys, 'msg': msg, 'user_data': user_data})
+    else:
+        rgp_entrys = Rgp_entry.objects.get(id=pk)
+        return render(request, 'send_email_verify.html', {'rgp_entrys': rgp_entrys, 'user_data': user_data})
+
+
+def nrgp_send_email_verify(request, pk):
+    # user_data = User_rgp.objects.get(usertype="verifier")
+    user_data = User_rgp.objects.all()
+    if request.method == "POST":
+        nrgp_entrys = Nrgp_entry.objects.get(id=pk)
+        subject = 'NRGP VERIFY'
+        message = f"""Concern Person Name :- {nrgp_entrys.cpname}\n Department Name :- {nrgp_entrys.dpname}\n Service Provide Name:-{nrgp_entrys.spname}\n Description :- {nrgp_entrys.desc}\n Unit :- {nrgp_entrys.unit}\n Quantity  :- {nrgp_entrys.qty}\n Remarks  :- {nrgp_entrys.remarks}
+        
+        verify----"{request.get_host()}/nrgp_verify_link/{pk}/1"
+
+        Not Verify----"{request.get_host()}/nrgp_verify_link/{pk}/0"
+        
+        """
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [request.POST['email']]
+        send_mail(subject, message, email_from, recipient_list)
+        msg = "E-Mail Sent Successfully"
+        verifier_email = User_rgp.objects.get(email=request.POST['email'])
+        nrgp_entrys.nrgp_verifier = verifier_email
+        nrgp_entrys.save()
+        return render(request, 'nrgp_send_email_verify.html', {'nrgp_entrys': nrgp_entrys, 'msg': msg, 'user_data': user_data})
+    else:
+        nrgp_entrys = Nrgp_entry.objects.get(id=pk)
+        return render(request, 'nrgp_send_email_verify.html', {'nrgp_entrys': nrgp_entrys, 'user_data': user_data})
+
+
+def approve_link(request, pk, status):
+    rgp_data = Rgp_entry.objects.get(id=pk)
+    rgp_data.approve_status = bool(status)
+    rgp_data.save()
+    return render(request, "index.html")
+
+
+def nrgp_approve_link(request, pk, status):
+    rgp_data = Nrgp_entry.objects.get(id=pk)
+    rgp_data.nrgp_approve_status = bool(status)
+    rgp_data.save()
+    return render(request, "index.html")
+
+
+def send_email_approve(request, pk):
+    # user_data = User_rgp.objects.get(usertype="approver")
+    user_data = User_rgp.objects.all()
+    if request.method == "POST":
+        rgp_entrys = Rgp_entry.objects.get(id=pk)
+        subject = 'RGP APPROVE'
+        message = f"""Concern Person Name :- {rgp_entrys.cpname}\n Department Name :- {rgp_entrys.dpname}\n Service Provide Name:-{rgp_entrys.spname}\n Description :- {rgp_entrys.desc}\n Unit :- {rgp_entrys.unit}\n Quantity  :- {rgp_entrys.qty}\n Remarks  :- {rgp_entrys.remarks}
+        
+        verify----"{request.get_host()}/approve_link/{pk}/1"
+
+        Not Verify----"{request.get_host()}/approve_link/{pk}/0"
+        
+        """
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [request.POST['email']]
+        send_mail(subject, message, email_from, recipient_list)
+        msg = "E-Mail Sent Successfully"
+        approver_email = User_rgp.objects.get(email=request.POST['email'])
+        rgp_entrys.approver = approver_email
+        rgp_entrys.save()
+        return render(request, 'send_email_approve.html', {'rgp_entrys': rgp_entrys, 'msg': msg, 'user_data': user_data})
+    else:
+        rgp_entrys = Rgp_entry.objects.get(id=pk)
+        return render(request, 'send_email_approve.html', {'rgp_entrys': rgp_entrys, 'user_data': user_data})
+
+
+def nrgp_send_email_approve(request, pk):
+    # user_data = User_rgp.objects.get(usertype="approver")
+    user_data = User_rgp.objects.all()
+    if request.method == "POST":
+        nrgp_entrys = Nrgp_entry.objects.get(id=pk)
+        subject = 'NRGP APPROVE'
+        message = f"""Concern Person Name :- {nrgp_entrys.cpname}\n Department Name :- {nrgp_entrys.dpname}\n Service Provide Name:-{nrgp_entrys.spname}\n Description :- {nrgp_entrys.desc}\n Unit :- {nrgp_entrys.unit}\n Quantity  :- {nrgp_entrys.qty}\n Remarks  :- {nrgp_entrys.remarks}
+        
+        verify----"{request.get_host()}/nrgp_approve_link/{pk}/1"
+
+        Not Verify----"{request.get_host()}/nrgp_approve_link/{pk}/0"
+        
+        """
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [request.POST['email']]
+        send_mail(subject, message, email_from, recipient_list)
+        msg = "E-Mail Sent Successfully"
+        approver_email = User_rgp.objects.get(email=request.POST['email'])
+        nrgp_entrys.nrgp_approver = approver_email
+        nrgp_entrys.save()
+        return render(request, 'nrgp_send_email_approve.html', {'nrgp_entrys': nrgp_entrys, 'msg': msg, 'user_data': user_data})
+    else:
+        nrgp_entrys = Nrgp_entry.objects.get(id=pk)
+        return render(request, 'nrgp_send_email_approve.html', {'nrgp_entrys': nrgp_entrys, 'user_data': user_data})
+
+
 def rgp_search(request):
     if request.method == "POST":
         # try:
-            # user_detail = Rgp_entry.objects.get(id=pk)
-            # signups=Signup.objects.all()
-            return render(request, 'register_rgp.html')
+        # user_detail = Rgp_entry.objects.get(id=pk)
+        # signups=Signup.objects.all()
+        return render(request, 'register_rgp.html')
         # except:
-            # msg = "Invalid RGP Number"
-            # return render(request, 'rgp_search.html', {'msg': msg})
+        # msg = "Invalid RGP Number"
+        # return render(request, 'rgp_search.html', {'msg': msg})
     else:
         return render(request, 'rgp_search.html')
+
 
 def rgp_all(request):
     log_data = Rgp_entry.objects.all()  # .order_by('-id')[:3]
     return render(request, 'rgp_all.html', {'log_data': log_data})
+
 
 def nrgp_all(request):
     log_data = Nrgp_entry.objects.all()  # .order_by('-id')[:3]
@@ -341,26 +480,83 @@ def nrgp_all(request):
 
 def nrgp_print(request, pk):
     user_detail = Nrgp_entry.objects.get(id=pk)
-    return render(request, 'nrgp_print.html', {'user_det': user_detail})
+    return render(request, 'nrgp_print.html', {'user_detail': user_detail})
 
-def rgp_outward(request):
-    if request.method=="POST":
-       return render(request, 'rgp_outward.html')
-    else:
-      return render(request, 'rgp_outward.html')
-        
-def rgp_inward(request):
-    if request.method=="POST":
-       return render(request, 'rgp_inward.html')
-    else:
-      return render(request, 'rgp_inward.html')   
 
-def nrgp_outward(request):
-    if request.method=="POST":
-       return render(request, 'nrgp_outward.html')
+def rgp_outward(request, pk):
+    if request.method == "POST":
+        rgp_entrys = Rgp_entry.objects.get(id=pk)
+        user = User_rgp.objects.get(email=request.session['email'])
+        rgp_entrys.outward_sender = user
+        rgp_entrys.outward_status = True
+        rgp_entrys.outward_mode = request.POST['tmode']
+        rgp_entrys.outward_reciever_name = request.POST['rname']
+        rgp_entrys.save()
+        msg = "RGP product Outward successfully"
+        return render(request, 'rgp_outward.html', {'rgp_entrys': rgp_entrys, 'msg': msg})
     else:
-      return render(request, 'nrgp_outward.html')
-    
+        rgp_entrys = Rgp_entry.objects.get(id=pk)
+        return render(request, 'rgp_outward.html', {'rgp_entrys': rgp_entrys})
+
+
+def nrgp_outward(request, pk):
+    if request.method == "POST":
+        nrgp_entrys = Nrgp_entry.objects.get(id=pk)
+        user = User_rgp.objects.get(email=request.session['email'])
+        nrgp_entrys.nrgp_outward_sender = user
+        nrgp_entrys.nrgp_outward_status = True
+        nrgp_entrys.nrgp_outward_mode = request.POST['tmode']
+        nrgp_entrys.nrgp_outward_reciever_name = request.POST['rname']
+        nrgp_entrys.save()
+        msg = "NRGP product Outward successfully"
+        return render(request, 'nrgp_outward.html', {'nrgp_entrys': nrgp_entrys, 'msg': msg})
+    else:
+        nrgp_entrys = Nrgp_entry.objects.get(id=pk)
+        return render(request, 'nrgp_outward.html', {'nrgp_entrys': nrgp_entrys})
+
+
+def rgp_inward(request, pk):
+    if request.method == "POST":
+        rgp_entrys = Rgp_entry.objects.get(id=pk)
+        user = User_rgp.objects.get(email=request.session['email'])
+        rgp_entrys.inward_receiver = user
+        rgp_entrys.inward_status = True
+        rgp_entrys.outward_status = False
+        rgp_entrys.inward_party_challan = request.POST['pcnumber']
+        rgp_entrys.inward_mode = request.POST['vnumber']
+        rgp_entrys.save()
+        msg = "RGP product Inward successfully"
+        return render(request, 'rgp_inward.html', {'rgp_entrys': rgp_entrys, 'msg': msg})
+    else:
+        rgp_entrys = Rgp_entry.objects.get(id=pk)
+        return render(request, 'rgp_inward.html', {'rgp_entrys': rgp_entrys})
+
+
 def nrgp_view_operator(request):
-    nrgp_entrys=Nrgp_entry.objects.filter(current_status="Entry")
-    return render(request,'nrgp_view_operator.html' ,{'nrgp_entrys':nrgp_entrys})
+    nrgp_entrys = Nrgp_entry.objects.filter(
+        current_status="Entry", nrgp_approve_status=True)
+    return render(request, 'nrgp_view_operator.html', {'nrgp_entrys': nrgp_entrys})
+
+
+def serial_generate(request):
+    now = datetime.datetime.now()
+    try:
+        latest = Rgp_entry.objects.last()
+        var3 = latest.rgp_serial
+        var4 = int(var3[:-5])+1
+        return str(var4)+"-"+str(now.year)
+    except:
+        var3 = "1"+"-"+str(now.year)
+        return var3
+
+
+def serial_generate_nrgp(request):
+    now = datetime.datetime.now()
+    try:
+        latest = Nrgp_entry.objects.last()
+        var3 = latest.nrgp_serial
+        var4 = int(var3[:-5])+1
+        return str(var4)+"-"+str(now.year)
+    except:
+        var3 = "1"+"-"+str(now.year)
+        return var3

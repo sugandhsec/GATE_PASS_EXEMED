@@ -63,28 +63,28 @@
       <!-- <td>weakup</td> - --> -->
     </tr>
     <tr> <!--3 Row-->
-      <td colspan="2">N. R. G. P. No:-
+      <td colspan="2">N. R. G. P. No:-{{user_detail.nrgp_serial}}
 
       </td>
-      <td colspan="3">Date & Time:- {{user_det.date}}
+      <td colspan="3">Date & Time:- {{user_detail.date}}
 
       </td>
 
 
     </tr>
     <tr> <!--4 Row-->
-      <td colspan="5">NAME OF THE CONCERN PERSON :- {{user_det.cpname}}
+      <td colspan="5">NAME OF THE CONCERN PERSON :- {{user_detail.cpname}}
 
       </td>
 
     </tr>
     <tr> <!--5 Row-->
-      <td colspan="5">NAME OF THE DEPARTMENT :- {{user_det.dpname}}
+      <td colspan="5">NAME OF THE DEPARTMENT :- {{user_detail.dpname}}
 
       </td>
     </tr>
     <tr> <!--6 Row--> <!-- align="center" for text alignment in row and column also can whole table alignment  -->
-      <td colspan="5">SERVICE PROVIDER NAME:- {{user_det.spname}}
+      <td colspan="5">SERVICE PROVIDER NAME:- {{user_detail.spname}}
 
       </td>
     </tr>
@@ -99,19 +99,19 @@
     </tr>
     <tr> <!--8 Row-->
       <th></th>
-      <th>{{user_det.desc}}</th>
-      <th>{{user_det.unit}}</th>
-      <th>{{user_det.qty}}</th>
-      <th>{{user_det.remarks}}</th>
+      <th>{{user_detail.desc}}</th>
+      <th>{{user_detail.unit}}</th>
+      <th>{{user_detail.qty}}</th>
+      <th>{{user_detail.remarks}}</th>
     </tr>
     <tr> <!--8 Row-->
-      <td colspan="2">Prepared By:-
+      <td colspan="2">Prepared By:-{{user_detail.nrgp_created.fname}} {{user_detail.nrgp_created.lname}}
 
       </td>
-      <td colspan="1">Verified By:-
+      <td colspan="1">Verified By:-{{user_detail.nrgp_verifier.fname}} {{user_detail.nrgp_verifier.lname}}
 
       </td>
-      <td colspan="2">Approved By:-
+      <td colspan="2">Approved By:-{{user_detail.nrgp_approver.fname}} {{user_detail.nrgp_approver.lname}}
       
       </td>
     </tr>

@@ -1,0 +1,120 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- BREADCRUMB -->
+    <div id="breadcrumb" class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>
+                        <li><a href="{% url 'back' %}">Home</a></li>
+                    </h4>
+                    <!--<h3 class="breadcrumb-header">Login</h3>
+						<ul class="breadcrumb-tree">
+							<li><a href="#">Home</a></li>-->
+                    <!--<li class="active">Login</li>-->
+                    </ul>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /BREADCRUMB -->
+
+    <!-- SECTION -->
+    <div class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+
+                <div class="col-md-7">
+                    <!-- Billing Details -->
+                    <div class="billing-details">
+                        <div class="section-title">
+                            <h3 class="title">RGP Details</h3>
+                        </div>
+                        {% if msg %}
+                        <b style="color:blue;">{{msg}}</b>
+                        {% endif %}
+                        <form name="login" method="post" action="{% url 'nrgp_send_email_approve' nrgp_entrys.id %}">
+                            <span id="email_error"></span>
+                            <!--<form name="login" method="post" action="{% url 'login' %}">-->
+
+                            {% csrf_token %}
+
+                            Concern Person Name : {{nrgp_entrys.cpname}}<br>
+                            Department Name : {{nrgp_entrys.dpname}}<br>
+                            Service Provider Name : {{nrgp_entrys.spname}}<br>
+                            Description : {{nrgp_entrys.desc}}<br>
+                            Unit : {{nrgp_entrys.unit}}<br>
+                            Quantity : {{nrgp_entrys.qty}}<br>
+                            Remarks : {{nrgp_entrys.remarks}}<br><br>
+
+                            <div class="form-group">
+                                <select name="email">
+                                    {% for i in user_data %}
+                                    <option>{{i.email}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+
+                            <button type="submit" class="primary-btn order-submit">Send MAIL</button>
+
+                            <a href="{% url 'back' %}"><button type="button"
+                                    class="primary-btn order-submit">Back</button></a>
+
+
+                        </form>
+
+                    </div>
+
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /SECTION -->
+
+
+        <script>
+            $("#email").change(function () {
+                var email = $(this).val();
+
+                $.ajax({
+                    url: '/ajax/validate_email/',
+                    data: {
+                        'email': email
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (!data.is_taken) {
+                            document.getElementById("email").style.border = "5px solid red";
+                            document.getElementById("email_error").innerHTML = "This Email Id Not Registered";
+                        } else {
+                            document.getElementById("email").style.border = "5px solid green";
+                            document.getElementById("email_error").innerHTML = "";
+                        }
+                    }
+                });
+            });
+
+        </script>
+
+</body>
+
+</html>
+{% endblock %}

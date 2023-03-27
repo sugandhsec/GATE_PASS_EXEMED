@@ -55,6 +55,7 @@
     <!-- hr tag for horizontal line-->
     <table id="alter">
       <tr>
+        <th>Sno.</th>
         <th>Concern Person Name</th>
         <th>Department Name</th>
         <th>Service Provider Name</th>
@@ -63,11 +64,25 @@
         <th>Quantity</th>
         <th>Remarks</th>
         <th>Date</th>
+        <th>Verifier</th>
+        <th>verify_status</th>
+        <th>approver</th>
+        <th>Approve Status</th>
+        <th>outward_sender_name</th>
+        <th>outward_status</th>
+        <th>outward_mode</th>
+        <th>outward_reciever_name</th>
+        <th>inward receiver</th>
+        <th>inward status</th>
+        <th>inward_mode</th>
+        <th>inward_party_challan</th>
         <th>Print</th>
+
       </tr>
       {% for i in log_data %}
 
       <tr>
+        <td>{{i.rgp_serial}}</td>
         <td>{{i.cpname}}</td>
         <td>{{i.dpname}}</td>
         <td>{{i.spname}}</td>
@@ -75,16 +90,20 @@
         <td>{{i.unit}}</td>
         <td>{{i.qty}}</td>
         <td>{{i.remarks}}</td>
-        
         <td>{{i.date}}</td>
-        <!-- <div id="hello" hidden>
-          <pre>Name  :  {{i.fname}} {{i.lname}}</pre>
-          <pre>Email  :{{i.email}}</pre>
-          <pre>Emp Code  :{{i.emp_code}}</pre>
-          <pre>Reason:   {{i.reason}}</pre>
-          <pre>Amount   :  {{i.amount}} </pre>
-          <pre>Time  :  {{i.date}} </pre>
-        </div> -->
+        <td>{{i.verifier.fname}} {{i.verifier.lname}}</td>
+        <td>{{i.verify_status}}</td>
+        <td>{{i.approver.fname}} {{i.approver.lname}}</td>
+        <td>{{i.approve_status}}</td>
+        <td>{{i.outward_sender.fname}} {{i.outward_sender.lname}}</td>
+        <td>{{i.outward_status}}</td>
+        <td>{{i.outward_mode}}</td>
+        <td>{{i.outward_reciever_name}}</td>
+        <td>{{i.inward_receiver.fname}} {{i.inward_receiver.lname}}</td>
+        <td>{{i.inward_status}}</td>
+        <td>{{i.inward_mode}}</td>
+        <td>{{i.inward_party_challan}}</td>
+
         <td>
           <button
             style="

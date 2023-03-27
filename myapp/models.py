@@ -7,51 +7,92 @@ from django.utils import timezone
 
 
 user_type = (
-	("operator", "operator"),
-	("manager", "manager"),
+    ("operator", "operator"),
+    ("manager", "manager"),
+    ("approver", "approver"),
+    ("verifier", "verifier")
 )
 
 # Create your models here.
-class User_rgp(models.Model):
-	fname=models.CharField(max_length=100)
-	lname=models.CharField(max_length=100)
-	email=models.EmailField()
-	password=models.CharField(max_length=100)
-	usertype=models.CharField(max_length=100,choices=user_type)
-	
 
-	def __str__(self):
-		return self.fname+" "+self.lname
+
+class User_rgp(models.Model):
+    fname = models.CharField(max_length=100)
+    lname = models.CharField(max_length=100)
+    email = models.EmailField()
+    password = models.CharField(max_length=100)
+    usertype = models.CharField(max_length=100, choices=user_type)
+
+    def __str__(self):
+        return self.fname+" "+self.lname
+
 
 class Rgp_entry(models.Model):
-	cpname=models.CharField(max_length=100)
-	dpname=models.CharField(max_length=100)
-	spname=models.CharField(max_length=100)
-	desc=models.CharField(max_length=100)
-	unit=models.CharField(max_length=100)
-	qty=models.CharField(max_length=100)
-	remarks=models.CharField(max_length=100)
-	date=models.DateTimeField(default=timezone.now)
-	made_on = models.DateTimeField(default=timezone.now)
-	current_status = models.CharField(max_length=10, default="Entry")
-	
+    rgp_serial = models.CharField(max_length=20, null=True)
+    rgp_created = models.ForeignKey(
+        User_rgp, on_delete=models.CASCADE, null=True)
+    cpname = models.CharField(max_length=100)
+    dpname = models.CharField(max_length=100)
+    spname = models.CharField(max_length=100)
+    desc = models.CharField(max_length=100)
+    unit = models.CharField(max_length=100)
+    qty = models.CharField(max_length=100)
+    remarks = models.CharField(max_length=100)
+    date = models.DateTimeField(default=timezone.now)
+    made_on = models.DateTimeField(default=timezone.now)
+    current_status = models.CharField(max_length=10, default="Entry")
+    verifier = models.ForeignKey(
+        User_rgp, related_name='verifier', null=True, on_delete=models.CASCADE)
+    verify_status = models.BooleanField(default=False)
+    approver = models.ForeignKey(
+        User_rgp, related_name='approver', null=True, on_delete=models.CASCADE)
+    approve_status = models.BooleanField(default=False)
+    outward_sender = models.ForeignKey(
+        User_rgp, related_name='outward_sender', on_delete=models.CASCADE, null=True)
+    outward_status = models.BooleanField(default=False)
+    inward_receiver = models.ForeignKey(
+        User_rgp, related_name='inward_receiver', on_delete=models.CASCADE, null=True)
+    inward_status = models.BooleanField(default=False)
+    outward_mode = models.CharField(max_length=100, null=True)
+    outward_reciever_name = models.CharField(max_length=100, null=True)
+    inward_party_challan = models.CharField(max_length=100, null=True)
+    inward_mode = models.CharField(max_length=100, null=True)
 
-	def __str__(self):
-		return self.cpname+" "+self.dpname
-	
+    def __str__(self):
+        return self.rgp_serial
+
+
 class Nrgp_entry(models.Model):
-	cpname=models.CharField(max_length=100)
-	dpname=models.CharField(max_length=100)
-	spname=models.CharField(max_length=100)
-	desc=models.CharField(max_length=100)
-	unit=models.CharField(max_length=100)
-	qty=models.CharField(max_length=100)
-	remarks=models.CharField(max_length=100)
-	date=models.DateTimeField(default=timezone.now)
-	made_on = models.DateTimeField(default=timezone.now)
-	current_status = models.CharField(max_length=10, default="Entry")
-	
+    nrgp_serial = models.CharField(max_length=20, null=True)
+    nrgp_created = models.ForeignKey(
+        User_rgp, on_delete=models.CASCADE, null=True)
+    cpname = models.CharField(max_length=100)
+    dpname = models.CharField(max_length=100)
+    spname = models.CharField(max_length=100)
+    desc = models.CharField(max_length=100)
+    unit = models.CharField(max_length=100)
+    qty = models.CharField(max_length=100)
+    remarks = models.CharField(max_length=100)
+    date = models.DateTimeField(default=timezone.now)
+    made_on = models.DateTimeField(default=timezone.now)
+    current_status = models.CharField(max_length=10, default="Entry")
+    nrgp_verifier = models.ForeignKey(
+        User_rgp, related_name='nrgp_verifier', null=True, on_delete=models.CASCADE)
+    nrgp_verify_status = models.BooleanField(default=False)
+    nrgp_approver = models.ForeignKey(
+        User_rgp, related_name='nrgp_approver', null=True, on_delete=models.CASCADE)
+    nrgp_approve_status = models.BooleanField(default=False)
+    nrgp_outward_sender = models.ForeignKey(
+        User_rgp, related_name='nrgp_outward_sender', on_delete=models.CASCADE, null=True)
+    nrgp_outward_status = models.BooleanField(default=False)
+    nrgp_outward_mode = models.CharField(max_length=100, null=True)
+    nrgp_outward_reciever_name = models.CharField(max_length=100, null=True)
 
-	def __str__(self):
-		return self.cpname+" "+self.dpname
+    def __str__(self):
+        return self.nrgp_serial
 
+# class rgp_outward(models.Model):
+#     rgp_product = models.ForeignKey(
+#         Rgp_entry, on_delete=models.CASCADE, null=True)
+#     mode=models.CharField(max_length=100,null=True)
+#     reciever_name=models.CharField(max_length=100,null=True)

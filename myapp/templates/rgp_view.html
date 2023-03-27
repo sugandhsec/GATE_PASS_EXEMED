@@ -51,13 +51,13 @@
 		</div>
 		<center style="color:red">{{msg}}</center>
 	</h4>
-	
+
 	<!-- ----------------temp div-------- -->
 	<div class="table_data">
-		
+
 		<table id="alter">
 			<tr>
-				
+				<th>sno.</th>
 				<th>Concern Person Name</th>
 				<th>Department Name</th>
 				<th>Service Provider Name</th>
@@ -67,44 +67,49 @@
 				<th>Remarks</th>
 				<th>Exit</th>
 				<th>Send Mail</th>
+				<th>Verify</th>
+				<th>Verify status</th>
+				<th>Approve</th>
+				<th>Approve status</th>
 				<th>Print</th>
 			</tr>
 			{% for i in rgp_entrys %}
 
-			
+
 			<form action="{% url 'rgp_exit' i.id %}" method="post">
 				{% csrf_token %}
 				<tr>
+					<td>{{i.rgp_serial}}</td>
 					<td> {{i.cpname}}</td>
 					<td>{{i.dpname}} </td>
 					<td>{{i.spname}} </td>
 					<td>{{i.desc}} </td>
 					<td>{{i.unit}} </td>
 					<td>{{i.qty}} </td>
-					
+
 					<td>{{i.remarks}} </td>
+					{% if i.inward_status%}
 					<td><button type="submit" class="primary-btn order-submit">Exit </button> </td>
+					{% else %}
+					<td><button type="submit" class="primary-btn order-submit" disabled>Exit </button> </td>
+					{% endif %}
 					<td><a href="{% url 'send_email' i.id %}"><button type="button"
 								class="primary-btn order-submit">Send
 								Mail</button></a> </td>
-					<td><button style="
-					               display: inline-block;
-  padding: 12px 30px;
-  background-color: #2b3f9b;
-  border: none;
-  border-radius: 40px;
-  color: #ffffff;
-  text-transform: uppercase;
-  font-weight: 700;
-  text-align: center;
-  -webkit-transition: 0.2s all;
-  transition: 0.2s all;
-					            ">
-						<a style="font-weight: bold; color: rgb(248, 248, 248)" href="{% url 'rgp_print' i.id %}" target="_blank">Print</a>
-					</button> </td>
-					<br>
-					<!-- <div><button onClick="window.print()">Print this page</button></div> -->
-
+					<td><a href="{% url 'send_email_verify' i.id %}"><button type="button"
+								class="primary-btn order-submit">Verify Mail</button></a></td>
+					<td>{{i.verify_status}}</td>
+					{% if i.verify_status %}
+					<td><a href="{% url 'send_email_approve' i.id %}"><button type="button"
+								class="primary-btn order-submit">Approve Mail</button></a></td>
+					{% else %}
+					<td><a href="{% url 'send_email_approve' i.id %}"><button type="button"
+								class="primary-btn order-submit" disabled>Approve
+								Mail</button></a></td>
+					{% endif %}
+					<td>{{i.approve_status}}</td>
+					<td><a href="{% url 'rgp_print' i.id %}" target="_blank"><button type="button"
+								class="primary-btn">Print</button></a></td>
 			</form>
 			{% endfor %}
 			</tr>

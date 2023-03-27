@@ -115,20 +115,20 @@
 					<li><a href="{% url 'back' %}">Home</a></li>
 
 				</ul>
-				
+
 			</div>
 		</div>
 		<!-- /row -->
-		
+
 	</div>
 	<!-- /container -->
 	{% if msg %}
 	<b style="color: blue;">{{msg}}</b>
 	{% endif %}
 </div>
-		
+
 <!-- /BREADCRUMB -->
-	
+
 <!-- SECTION -->
 <div class="section">
 	<!-- container -->
@@ -145,96 +145,66 @@
 
 					<!-- ------TEMP DIV------------------- -->
 					<div class="top_set">
-						<form name="rgp_signup" method="post" action="#" enctype="multipart/form-data"
-							onsubmit="printingdata()">
+						<form name="rgp_signup" method="post" action="{% url 'rgp_inward' rgp_entrys.id %}"
+							enctype="multipart/form-data" onsubmit="printingdata()">
 							{% csrf_token %}
 
 							<div class="form-group">
 
 							</div>
 							<div class="form-group">
-								<input class="input" type="text" name="cpname" id="val_fname" placeholder="Name of Concern Person"
-									required>
+								<input class="input" type="text" name="cpname" value="{{rgp_entrys.cpname}}"
+									id="val_fname" placeholder="Name of Concern Person" required>
 
 
 							</div>
 							<div class="form-group">
-								<input class="input" type="text" name="dpname" id="val_surname" placeholder="Name of Department"
-									required>
+								<input class="input" type="text" value="{{rgp_entrys.dpname}}" name="dpname"
+									id="val_surname" placeholder="Name of Department" required>
 							</div>
 							<div class="form-group">
-								<input class="input" type="text" name="spname" id="val_surname" placeholder="Service Provider Name" required>
-							</div>
-							
-							<div class="form-group">
-								<input class="input" type="text" name="desc" id="val_surname" placeholder="Item Description" required>
+								<input class="input" type="text" value="{{rgp_entrys.spname}}" name="spname"
+									id="val_surname" placeholder="Service Provider Name" required>
 							</div>
 
-								<!-- <div class="form-group">
+							<div class="form-group">
+								<input class="input" type="text" name="desc" value="{{rgp_entrys.desc}}"
+									id="val_surname" placeholder="Item Description" required>
+							</div>
+
+							<!-- <div class="form-group">
 									<input class="input" type="text" name="unit" id="val_surname" placeholder="Unit" required>
 								</div> -->
 							<select name="unit">
-								<option>---Select Unit---</option>
-								<option>NOS</option>
-							
-								<option>KG</option>
-								<option>SET</option>
-								</select>
-								<br><br>
+								<option>{{rgp_entrys.unit}}</option>
+							</select>
+							<br><br>
 							<div class="form-group">
-								<input class="input" type="text" name="qty" placeholder="Quantity" required>
-							
+								<input class="input" type="text" value="{{rgp_entrys.qty}}" name="qty"
+									placeholder="Quantity" required>
+
 							</div>
 							<div class="form-group">
 								<input class="input" type="text" name="remarks" id="val_reason" placeholder="Remarks"
+									value="{{rgp_entrys.remarks}}" required>
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="pcnumber" placeholder="Party Challan Number"
 									required>
+
 							</div>
 							<div class="form-group">
-								<input class="input" type="text" name="pcnumber" placeholder="Party Challan Number" required>
-							
+								<input class="input" type="text" name="vnumber"
+									placeholder="Travel Mode / Vehicle Number" required>
+
 							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="vnumber" placeholder="Travel Mode / Vehicle Number" required>
-							
-							</div>
-							
-							<!-- <tr align="center">
-							<td>Gender</td>
-							<td><input type="radio" value="male" name="gender" required>Male
-							<td><input type="radio" value="female" name="gender" required>Female
-							</td>  -->
-							<br>
 
-							<!--<td>Entry Status</td>
-							<td><input type="radio" value="in" name="entry">In
-							<!--<td><input type="radio" value="exit" name="entry">Exit-->
-							<!-- </td>
 							
-							
-							
-							<div class="form-group">
-								<input class="input" type="text" name="cname" placeholder="Company Name" required>
-							</div>
-							<div class="form-group">
-								<input class="input" type="tel" name="purpose" placeholder="Purpose" required>
-							</div> -->
-
-							<!-- <div class="form-group">
-								
-								<input class="input" type="text" name="tosee" placeholder="To See" required>
-							</div> -->
-
-
-
-							<!-- <div class="form-group">
-								
-								<input class="input" type="text" name="todepartment" placeholder="To Department" required>
-							</div> -->
 							<div class="form-group">
 
 
 							</div>
-						
+
 							<button type="submit" class="primary-btn order-submit">Submit </button>
 							<a href="{% url 'back' %}"><button type="button"
 									class="primary-btn order-submit">Back</button></a><br><br>
