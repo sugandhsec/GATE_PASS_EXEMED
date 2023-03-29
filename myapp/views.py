@@ -33,6 +33,8 @@ def index(request):
         if user.usertype == "manager":
             request.session['email'] = user.email
             request.session['fname'] = user.fname
+            request.session['dname'] = user.department
+
     # request.session['profile_pic']=user.profile_pic.url
             return render(request, 'in.html')
         else:
@@ -64,6 +66,7 @@ def login(request):
             if user.usertype == "manager":
                 request.session['email'] = user.email
                 request.session['fname'] = user.fname
+                request.session['dname'] = user.department
             # request.session['profile_pic']=user.profile_pic.url
                 return render(request, 'in.html')
             else:
@@ -219,7 +222,8 @@ def new_password(request):
 
 
 def rgp_view(request):
-    rgp_entrys = Rgp_entry.objects.filter(current_status="Entry")
+    rgp_entrys = Rgp_entry.objects.filter(
+        rgp_created__department=request.session['dname'], current_status="Entry")
     return render(request, 'rgp_view.html', {'rgp_entrys': rgp_entrys})
 
 
@@ -262,7 +266,8 @@ def rgp_print(request, pk):
 
 def nrgp_view(request):
     # if request.method=="POST":
-    nrgp_entrys = Nrgp_entry.objects.filter(current_status="Entry")
+    nrgp_entrys = Nrgp_entry.objects.filter(
+        nrgp_created__department=request.session['dname'], current_status="Entry")
     return render(request, 'nrgp_view.html', {'nrgp_entrys': nrgp_entrys})
 
 
@@ -327,7 +332,7 @@ def nrgp_send_email(request, pk):
 def verify_link(request, pk, status):
     rgp_data = Rgp_entry.objects.get(id=pk)
     rgp_data.verify_status = bool(status)
-    rgp_data.rgp_verify_time=timezone.now()
+    rgp_data.rgp_verify_time = timezone.now()
     rgp_data.save()
     return render(request, "index.html")
 
@@ -335,7 +340,7 @@ def verify_link(request, pk, status):
 def nrgp_verify_link(request, pk, status):
     rgp_data = Nrgp_entry.objects.get(id=pk)
     rgp_data.nrgp_verify_status = bool(status)
-    rgp_data.nrgp_verify_time=timezone.now()
+    rgp_data.nrgp_verify_time = timezone.now()
     rgp_data.save()
     return render(request, "index.html")
 
@@ -395,7 +400,7 @@ def nrgp_send_email_verify(request, pk):
 def approve_link(request, pk, status):
     rgp_data = Rgp_entry.objects.get(id=pk)
     rgp_data.approve_status = bool(status)
-    rgp_data.rgp_approve_time=timezone.now()
+    rgp_data.rgp_approve_time = timezone.now()
     rgp_data.save()
     return render(request, "index.html")
 
@@ -403,7 +408,7 @@ def approve_link(request, pk, status):
 def nrgp_approve_link(request, pk, status):
     rgp_data = Nrgp_entry.objects.get(id=pk)
     rgp_data.nrgp_approve_status = bool(status)
-    rgp_data.nrgp_approve_time=timezone.now()
+    rgp_data.nrgp_approve_time = timezone.now()
     rgp_data.save()
     return render(request, "index.html")
 
@@ -474,12 +479,14 @@ def rgp_search(request):
 
 
 def rgp_all(request):
-    log_data = Rgp_entry.objects.all()  # .order_by('-id')[:3]
+    log_data = Rgp_entry.objects.filter(
+        rgp_created__department=request.session['dname'])  # .order_by('-id')[:3]
     return render(request, 'rgp_all.html', {'log_data': log_data})
 
 
 def nrgp_all(request):
-    log_data = Nrgp_entry.objects.all()  # .order_by('-id')[:3]
+    log_data = Nrgp_entry.objects.filter(
+        nrgp_created__department=request.session['dname'])  # .order_by('-id')[:3]
     return render(request, 'nrgp_all.html', {'log_data': log_data})
 
 
@@ -496,7 +503,7 @@ def rgp_outward(request, pk):
         rgp_entrys.outward_status = True
         rgp_entrys.outward_mode = request.POST['tmode']
         rgp_entrys.outward_reciever_name = request.POST['rname']
-        rgp_entrys.rgp_outward_time=timezone.now()
+        rgp_entrys.rgp_outward_time = timezone.now()
         rgp_entrys.save()
         msg = "RGP product Outward successfully"
         return render(request, 'rgp_outward.html', {'rgp_entrys': rgp_entrys, 'msg': msg})
@@ -513,7 +520,7 @@ def nrgp_outward(request, pk):
         nrgp_entrys.nrgp_outward_status = True
         nrgp_entrys.nrgp_outward_mode = request.POST['tmode']
         nrgp_entrys.nrgp_outward_reciever_name = request.POST['rname']
-        nrgp_entrys.nrgp_outward_time=timezone.now()
+        nrgp_entrys.nrgp_outward_time = timezone.now()
         nrgp_entrys.save()
         msg = "NRGP product Outward successfully"
         return render(request, 'nrgp_outward.html', {'nrgp_entrys': nrgp_entrys, 'msg': msg})
@@ -531,7 +538,7 @@ def rgp_inward(request, pk):
         rgp_entrys.outward_status = False
         rgp_entrys.inward_party_challan = request.POST['pcnumber']
         rgp_entrys.inward_mode = request.POST['vnumber']
-        rgp_entrys.rgp_inward_time=timezone.now()
+        rgp_entrys.rgp_inward_time = timezone.now()
         rgp_entrys.save()
         msg = "RGP product Inward successfully"
         return render(request, 'rgp_inward.html', {'rgp_entrys': rgp_entrys, 'msg': msg})

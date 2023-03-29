@@ -12,6 +12,12 @@ user_type = (
     ("approver", "approver"),
     ("verifier", "verifier")
 )
+dept = (
+    ("admin", "admin"),
+    ("HR", "HR"),
+    ("QA", "QA"),
+    ("QC", "QC")
+)
 
 # Create your models here.
 
@@ -22,9 +28,9 @@ class User_rgp(models.Model):
     email = models.EmailField()
     password = models.CharField(max_length=100)
     usertype = models.CharField(max_length=100, choices=user_type)
-
+    department=models.CharField(max_length=100,choices=dept,null=True)
     def __str__(self):
-        return self.fname+" "+self.lname
+        return self.fname+" "+self.lname+" "+self.department+" "+self.usertype
 
 
 class Rgp_entry(models.Model):
