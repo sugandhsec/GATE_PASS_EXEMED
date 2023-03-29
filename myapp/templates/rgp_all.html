@@ -66,16 +66,20 @@
         <th>Date</th>
         <th>Verifier</th>
         <th>verify_status</th>
+        <th>verify time</th>
         <th>approver</th>
         <th>Approve Status</th>
+        <th>Approve time</th>
         <th>outward_sender_name</th>
         <th>outward_status</th>
         <th>outward_mode</th>
         <th>outward_reciever_name</th>
+        <th>Outward time</th>
         <th>inward receiver</th>
         <th>inward status</th>
         <th>inward_mode</th>
         <th>inward_party_challan</th>
+        <th>Inward Time</th>
         <th>Print</th>
 
       </tr>
@@ -93,17 +97,20 @@
         <td>{{i.date}}</td>
         <td>{{i.verifier.fname}} {{i.verifier.lname}}</td>
         <td>{{i.verify_status}}</td>
+        <th>{{i.rgp_verify_time}}</th>
         <td>{{i.approver.fname}} {{i.approver.lname}}</td>
         <td>{{i.approve_status}}</td>
+        <td>{{i.rgp_approve_time}}</td>
         <td>{{i.outward_sender.fname}} {{i.outward_sender.lname}}</td>
         <td>{{i.outward_status}}</td>
         <td>{{i.outward_mode}}</td>
         <td>{{i.outward_reciever_name}}</td>
+        <td>{{i.rgp_outward_time}}</td>
         <td>{{i.inward_receiver.fname}} {{i.inward_receiver.lname}}</td>
         <td>{{i.inward_status}}</td>
         <td>{{i.inward_mode}}</td>
         <td>{{i.inward_party_challan}}</td>
-
+        <td>{{i.rgp_inward_time}}</td>
         <td>
           <button
             style="

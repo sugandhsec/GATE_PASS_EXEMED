@@ -68,8 +68,10 @@
 				<th>Send Mail</th>
 				<th>Verify</th>
 				<th>Verify status</th>
+				<th>Verify Time</th>
 				<th>Approve</th>
 				<th>Approve status</th>
+				<th>Approve Time</th>
 				<th>Print</th>
 			</tr>
 			{% for i in nrgp_entrys %}
@@ -95,6 +97,7 @@
 								class="primary-btn order-submit">Verify
 								Mail</button></a></td>
 					<td>{{i.nrgp_verify_status}}</td>
+					<td>{{i.nrgp_verify_time}}</td>
 					{% if i.nrgp_verify_status %}
 					<td><a href="{% url 'nrgp_send_email_approve' i.id %}"><button type="button"
 								class="primary-btn order-submit">Approve
@@ -105,6 +108,7 @@
 								Mail</button></a></td>
 					{% endif %}
 					<td>{{i.nrgp_approve_status}}</td>
+					<td>{{i.nrgp_approve_time}}</td>
 					<td><a href="{% url 'nrgp_print' i.id %}" target="_blank"><button type="button" class="primary-btn">Print</button></a>
 					</td>
 					<br>

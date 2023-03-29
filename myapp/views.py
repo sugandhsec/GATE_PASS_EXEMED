@@ -19,6 +19,7 @@ from mysite import settings
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from .models import User_rgp, Rgp_entry
+from django.utils import timezone
 
 
 # relative import of forms
@@ -326,6 +327,7 @@ def nrgp_send_email(request, pk):
 def verify_link(request, pk, status):
     rgp_data = Rgp_entry.objects.get(id=pk)
     rgp_data.verify_status = bool(status)
+    rgp_data.rgp_verify_time=timezone.now()
     rgp_data.save()
     return render(request, "index.html")
 
@@ -333,6 +335,7 @@ def verify_link(request, pk, status):
 def nrgp_verify_link(request, pk, status):
     rgp_data = Nrgp_entry.objects.get(id=pk)
     rgp_data.nrgp_verify_status = bool(status)
+    rgp_data.nrgp_verify_time=timezone.now()
     rgp_data.save()
     return render(request, "index.html")
 
@@ -392,6 +395,7 @@ def nrgp_send_email_verify(request, pk):
 def approve_link(request, pk, status):
     rgp_data = Rgp_entry.objects.get(id=pk)
     rgp_data.approve_status = bool(status)
+    rgp_data.rgp_approve_time=timezone.now()
     rgp_data.save()
     return render(request, "index.html")
 
@@ -399,6 +403,7 @@ def approve_link(request, pk, status):
 def nrgp_approve_link(request, pk, status):
     rgp_data = Nrgp_entry.objects.get(id=pk)
     rgp_data.nrgp_approve_status = bool(status)
+    rgp_data.nrgp_approve_time=timezone.now()
     rgp_data.save()
     return render(request, "index.html")
 
@@ -491,6 +496,7 @@ def rgp_outward(request, pk):
         rgp_entrys.outward_status = True
         rgp_entrys.outward_mode = request.POST['tmode']
         rgp_entrys.outward_reciever_name = request.POST['rname']
+        rgp_entrys.rgp_outward_time=timezone.now()
         rgp_entrys.save()
         msg = "RGP product Outward successfully"
         return render(request, 'rgp_outward.html', {'rgp_entrys': rgp_entrys, 'msg': msg})
@@ -507,6 +513,7 @@ def nrgp_outward(request, pk):
         nrgp_entrys.nrgp_outward_status = True
         nrgp_entrys.nrgp_outward_mode = request.POST['tmode']
         nrgp_entrys.nrgp_outward_reciever_name = request.POST['rname']
+        nrgp_entrys.nrgp_outward_time=timezone.now()
         nrgp_entrys.save()
         msg = "NRGP product Outward successfully"
         return render(request, 'nrgp_outward.html', {'nrgp_entrys': nrgp_entrys, 'msg': msg})
@@ -524,6 +531,7 @@ def rgp_inward(request, pk):
         rgp_entrys.outward_status = False
         rgp_entrys.inward_party_challan = request.POST['pcnumber']
         rgp_entrys.inward_mode = request.POST['vnumber']
+        rgp_entrys.rgp_inward_time=timezone.now()
         rgp_entrys.save()
         msg = "RGP product Inward successfully"
         return render(request, 'rgp_inward.html', {'rgp_entrys': rgp_entrys, 'msg': msg})

@@ -69,8 +69,10 @@
 				<th>Send Mail</th>
 				<th>Verify</th>
 				<th>Verify status</th>
+				<th>Verify time</th>
 				<th>Approve</th>
 				<th>Approve status</th>
+				<th>Approve Time</th>
 				<th>Print</th>
 			</tr>
 			{% for i in rgp_entrys %}
@@ -99,6 +101,7 @@
 					<td><a href="{% url 'send_email_verify' i.id %}"><button type="button"
 								class="primary-btn order-submit">Verify Mail</button></a></td>
 					<td>{{i.verify_status}}</td>
+					<td>{{i.rgp_verify_time}}</td>
 					{% if i.verify_status %}
 					<td><a href="{% url 'send_email_approve' i.id %}"><button type="button"
 								class="primary-btn order-submit">Approve Mail</button></a></td>
@@ -108,6 +111,8 @@
 								Mail</button></a></td>
 					{% endif %}
 					<td>{{i.approve_status}}</td>
+					<td>{{i.rgp_approve_time}}</td>
+
 					<td><a href="{% url 'rgp_print' i.id %}" target="_blank"><button type="button"
 								class="primary-btn">Print</button></a></td>
 			</form>

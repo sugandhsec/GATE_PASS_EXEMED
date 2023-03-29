@@ -44,19 +44,25 @@ class Rgp_entry(models.Model):
     verifier = models.ForeignKey(
         User_rgp, related_name='verifier', null=True, on_delete=models.CASCADE)
     verify_status = models.BooleanField(default=False)
+    rgp_verify_time = models.DateTimeField(null=True)
     approver = models.ForeignKey(
         User_rgp, related_name='approver', null=True, on_delete=models.CASCADE)
     approve_status = models.BooleanField(default=False)
+    rgp_approve_time = models.DateTimeField( null=True)
+
     outward_sender = models.ForeignKey(
         User_rgp, related_name='outward_sender', on_delete=models.CASCADE, null=True)
     outward_status = models.BooleanField(default=False)
+    outward_mode = models.CharField(max_length=100, null=True)
+    outward_reciever_name = models.CharField(max_length=100, null=True)
+    rgp_outward_time = models.DateTimeField( null=True)
+
     inward_receiver = models.ForeignKey(
         User_rgp, related_name='inward_receiver', on_delete=models.CASCADE, null=True)
     inward_status = models.BooleanField(default=False)
-    outward_mode = models.CharField(max_length=100, null=True)
-    outward_reciever_name = models.CharField(max_length=100, null=True)
     inward_party_challan = models.CharField(max_length=100, null=True)
     inward_mode = models.CharField(max_length=100, null=True)
+    rgp_inward_time = models.DateTimeField(null=True)
 
     def __str__(self):
         return self.rgp_serial
@@ -79,14 +85,17 @@ class Nrgp_entry(models.Model):
     nrgp_verifier = models.ForeignKey(
         User_rgp, related_name='nrgp_verifier', null=True, on_delete=models.CASCADE)
     nrgp_verify_status = models.BooleanField(default=False)
+    nrgp_verify_time = models.DateTimeField( null=True)
     nrgp_approver = models.ForeignKey(
         User_rgp, related_name='nrgp_approver', null=True, on_delete=models.CASCADE)
     nrgp_approve_status = models.BooleanField(default=False)
+    nrgp_approve_time = models.DateTimeField(null=True)
     nrgp_outward_sender = models.ForeignKey(
         User_rgp, related_name='nrgp_outward_sender', on_delete=models.CASCADE, null=True)
     nrgp_outward_status = models.BooleanField(default=False)
     nrgp_outward_mode = models.CharField(max_length=100, null=True)
     nrgp_outward_reciever_name = models.CharField(max_length=100, null=True)
+    nrgp_outward_time = models.DateTimeField( null=True)
 
     def __str__(self):
         return self.nrgp_serial
