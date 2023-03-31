@@ -20,6 +20,9 @@ from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from .models import User_rgp, Rgp_entry
 from django.utils import timezone
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 
 # relative import of forms
@@ -344,23 +347,34 @@ def nrgp_verify_link(request, pk, status):
     rgp_data.save()
     return render(request, "index.html")
 
+# <a href=f"{request.get_host()}/verify_link/{pk}/1"><button>Verify<button></a>
+
 
 def send_email_verify(request, pk):
     # user_data = User_rgp.objects.get(usertype="verifier")
     user_data = User_rgp.objects.all()
     if request.method == "POST":
+        # verify =' <a href=f"{request.get_host()}/verify_link/{pk}/1"><button>Verify<button></a>'
+        # notverify = f"{request.get_host()}/verify_link/{pk}/0"
         rgp_entrys = Rgp_entry.objects.get(id=pk)
         subject = 'RGP VERIFY'
-        message = f"""Concern Person Name :- {rgp_entrys.cpname}\n Department Name :- {rgp_entrys.dpname}\n Service Provide Name:-{rgp_entrys.spname}\n Description :- {rgp_entrys.desc}\n Unit :- {rgp_entrys.unit}\n Quantity  :- {rgp_entrys.qty}\n Remarks  :- {rgp_entrys.remarks}
-        
+        message = f"""
+        Concern Person Name :- {rgp_entrys.cpname}\n Department Name :- {rgp_entrys.dpname}\n Service Provide Name:-{rgp_entrys.spname}\n Description :- {rgp_entrys.desc}\n Unit :- {rgp_entrys.unit}\n Quantity  :- {rgp_entrys.qty}\n Remarks  :- {rgp_entrys.remarks}
         verify----"{request.get_host()}/verify_link/{pk}/1"
 
         Not Verify----"{request.get_host()}/verify_link/{pk}/0"
-        
         """
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [request.POST['email']]
         send_mail(subject, message, email_from, recipient_list)
+
+        # html_content = render_to_string(message)
+        # text_content=strip_tags(message)
+        # email = EmailMultiAlternatives(
+        #     subject, text_content, email_from, recipient_list)
+        # email.attach_alternative(text_content,"text/html")
+        # email.send()
+
         msg = "E-Mail Sent Successfully"
         verifier_email = User_rgp.objects.get(email=request.POST['email'])
         rgp_entrys.verifier = verifier_email
