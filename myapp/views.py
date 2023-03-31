@@ -354,8 +354,10 @@ def send_email_verify(request, pk):
     # user_data = User_rgp.objects.get(usertype="verifier")
     user_data = User_rgp.objects.all()
     if request.method == "POST":
-        # verify =' <a href=f"{request.get_host()}/verify_link/{pk}/1"><button>Verify<button></a>'
-        # notverify = f"{request.get_host()}/verify_link/{pk}/0"
+        verify =f"{request.get_host()}/verify_link/{pk}/1"
+        notverify = f"{request.get_host()}/verify_link/{pk}/0"
+
+        notverify = f"{request.get_host()}/verify_link/{pk}/0"
         rgp_entrys = Rgp_entry.objects.get(id=pk)
         subject = 'RGP VERIFY'
         message = f"""
@@ -366,14 +368,15 @@ def send_email_verify(request, pk):
         """
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [request.POST['email']]
-        send_mail(subject, message, email_from, recipient_list)
+        # send_mail(subject, message, email_from, recipient_list)
 
-        # html_content = render_to_string(message)
-        # text_content=strip_tags(message)
-        # email = EmailMultiAlternatives(
-        #     subject, text_content, email_from, recipient_list)
-        # email.attach_alternative(text_content,"text/html")
-        # email.send()
+        html_content = render_to_string(
+            "rgp_verify.html", {"verify": verify, "notverify": notverify})
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            subject, text_content, email_from, recipient_list)
+        email.attach_alternative(html_content, "text/html")
+        email.send()
 
         msg = "E-Mail Sent Successfully"
         verifier_email = User_rgp.objects.get(email=request.POST['email'])
