@@ -23,7 +23,7 @@ from django.utils import timezone
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-
+from urllib.parse import quote
 
 # relative import of forms
 # Create your views here.
@@ -357,24 +357,44 @@ def send_email_verify(request, pk):
         usertype="verifier", department=request.session['dname'])
     # user_data = User_rgp.objects.all()
     if request.method == "POST":
-        verify = f"{request.get_host()}/verify_link/{pk}/1"
-        notverify = f"{request.get_host()}/verify_link/{pk}/0"
 
-        notverify = f"{request.get_host()}/verify_link/{pk}/0"
         rgp_entrys = Rgp_entry.objects.get(id=pk)
         subject = 'RGP VERIFY'
-        message = f"""
-        Concern Person Name :- {rgp_entrys.cpname}\n Department Name :- {rgp_entrys.dpname}\n Service Provide Name:-{rgp_entrys.spname}\n Description :- {rgp_entrys.desc}\n Unit :- {rgp_entrys.unit}\n Quantity  :- {rgp_entrys.qty}\n Remarks  :- {rgp_entrys.remarks}
-        verify----"{request.get_host()}/verify_link/{pk}/1"
+        # verify_link = quote(f"{request.get_host()}/verify_link/{pk}/1")
+        # unverify_link = quote(f"{request.get_host()}/verify_link/{pk}/0")
 
-        Not Verify----"{request.get_host()}/verify_link/{pk}/0"
-        """
+        # message = f"""
+        # Concern Person Name :- {rgp_entrys.cpname}\n Department Name :- {rgp_entrys.dpname}\n Service Provide Name:-{rgp_entrys.spname}\n Description :- {rgp_entrys.desc}\n Unit :- {rgp_entrys.unit}\n Quantity  :- {rgp_entrys.qty}\n Remarks  :- {rgp_entrys.remarks}
+        # verify----"{request.get_host()}/verify_link/{pk}/1"
+
+        # Not Verify----"{request.get_host()}/verify_link/{pk}/0"
+
+        # verify={verify_link}
+
+        # not verify={unverify_link}
+
+        # """
+        # send_mail(subject, message, email_from, recipient_list)
+        verify = f"{request.get_host()}/verify_link/{pk}/1"
+        notverify = f"{request.get_host()}/verify_link/{pk}/0"
+        content ={
+            "verify": verify,
+              "notverify": notverify,
+              "pname": rgp_entrys.cpname,
+              "dname":rgp_entrys.dpname,
+              "sname": rgp_entrys.spname,
+              "desc":rgp_entrys.desc,
+              "unit": rgp_entrys.unit,
+              "qty":rgp_entrys.qty,
+              "remarks": rgp_entrys.remarks,
+              "va":"VERIFY",
+              "va1":"NOT VERIFY"
+        }
+
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [request.POST['email']]
-        # send_mail(subject, message, email_from, recipient_list)
-
         html_content = render_to_string(
-            "rgp_verify.html", {"verify": verify, "notverify": notverify})
+            "rgp_verify.html", content)
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(
             subject, text_content, email_from, recipient_list)
@@ -398,16 +418,41 @@ def nrgp_send_email_verify(request, pk):
     if request.method == "POST":
         nrgp_entrys = Nrgp_entry.objects.get(id=pk)
         subject = 'NRGP VERIFY'
-        message = f"""Concern Person Name :- {nrgp_entrys.cpname}\n Department Name :- {nrgp_entrys.dpname}\n Service Provide Name:-{nrgp_entrys.spname}\n Description :- {nrgp_entrys.desc}\n Unit :- {nrgp_entrys.unit}\n Quantity  :- {nrgp_entrys.qty}\n Remarks  :- {nrgp_entrys.remarks}
+        # message = f"""Concern Person Name :- {nrgp_entrys.cpname}\n Department Name :- {nrgp_entrys.dpname}\n Service Provide Name:-{nrgp_entrys.spname}\n Description :- {nrgp_entrys.desc}\n Unit :- {nrgp_entrys.unit}\n Quantity  :- {nrgp_entrys.qty}\n Remarks  :- {nrgp_entrys.remarks}
         
-        verify----"{request.get_host()}/nrgp_verify_link/{pk}/1"
+        # verify----"{request.get_host()}/nrgp_verify_link/{pk}/1"
 
-        Not Verify----"{request.get_host()}/nrgp_verify_link/{pk}/0"
+        # Not Verify----"{request.get_host()}/nrgp_verify_link/{pk}/0"
         
-        """
+        # """
+        # email_from = settings.EMAIL_HOST_USER
+        # recipient_list = [request.POST['email']]
+        # send_mail(subject, message, email_from, recipient_list)
+        verify = f"{request.get_host()}/nrgp_verify_link/{pk}/1"
+        notverify = f"{request.get_host()}/nrgp_verify_link/{pk}/0"
+        content = {
+            "verify": verify,
+            "notverify": notverify,
+            "pname": nrgp_entrys.cpname,
+            "dname": nrgp_entrys.dpname,
+            "sname": nrgp_entrys.spname,
+            "desc": nrgp_entrys.desc,
+            "unit": nrgp_entrys.unit,
+            "qty": nrgp_entrys.qty,
+            "remarks": nrgp_entrys.remarks,
+            "va": "VERIFY",
+            "va1": "NOT VERIFY"
+        }
+
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [request.POST['email']]
-        send_mail(subject, message, email_from, recipient_list)
+        html_content = render_to_string(
+            "rgp_verify.html", content)
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            subject, text_content, email_from, recipient_list)
+        email.attach_alternative(html_content, "text/html")
+        email.send()
         msg = "E-Mail Sent Successfully"
         verifier_email = User_rgp.objects.get(email=request.POST['email'])
         nrgp_entrys.nrgp_verifier = verifier_email
@@ -441,16 +486,41 @@ def send_email_approve(request, pk):
     if request.method == "POST":
         rgp_entrys = Rgp_entry.objects.get(id=pk)
         subject = 'RGP APPROVE'
-        message = f"""Concern Person Name :- {rgp_entrys.cpname}\n Department Name :- {rgp_entrys.dpname}\n Service Provide Name:-{rgp_entrys.spname}\n Description :- {rgp_entrys.desc}\n Unit :- {rgp_entrys.unit}\n Quantity  :- {rgp_entrys.qty}\n Remarks  :- {rgp_entrys.remarks}
+        # message = f"""Concern Person Name :- {rgp_entrys.cpname}\n Department Name :- {rgp_entrys.dpname}\n Service Provide Name:-{rgp_entrys.spname}\n Description :- {rgp_entrys.desc}\n Unit :- {rgp_entrys.unit}\n Quantity  :- {rgp_entrys.qty}\n Remarks  :- {rgp_entrys.remarks}
         
-        verify----"{request.get_host()}/approve_link/{pk}/1"
+        # verify----"{request.get_host()}/approve_link/{pk}/1"
 
-        Not Verify----"{request.get_host()}/approve_link/{pk}/0"
+        # Not Verify----"{request.get_host()}/approve_link/{pk}/0"
         
-        """
+        # """
+        # email_from = settings.EMAIL_HOST_USER
+        # recipient_list = [request.POST['email']]
+        # send_mail(subject, message, email_from, recipient_list)
+        verify = f"{request.get_host()}/approve_link/{pk}/1"
+        notverify = f"{request.get_host()}/approve_link/{pk}/0"
+        content = {
+            "verify": verify,
+            "notverify": notverify,
+            "pname": rgp_entrys.cpname,
+            "dname": rgp_entrys.dpname,
+            "sname": rgp_entrys.spname,
+            "desc": rgp_entrys.desc,
+            "unit": rgp_entrys.unit,
+            "qty": rgp_entrys.qty,
+            "remarks": rgp_entrys.remarks,
+              "va":"APPROVE",
+              "va1":"NOT APPROVE"
+        }
+
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [request.POST['email']]
-        send_mail(subject, message, email_from, recipient_list)
+        html_content = render_to_string(
+            "rgp_verify.html", content)
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            subject, text_content, email_from, recipient_list)
+        email.attach_alternative(html_content, "text/html")
+        email.send()
         msg = "E-Mail Sent Successfully"
         approver_email = User_rgp.objects.get(email=request.POST['email'])
         rgp_entrys.approver = approver_email
@@ -467,16 +537,41 @@ def nrgp_send_email_approve(request, pk):
     if request.method == "POST":
         nrgp_entrys = Nrgp_entry.objects.get(id=pk)
         subject = 'NRGP APPROVE'
-        message = f"""Concern Person Name :- {nrgp_entrys.cpname}\n Department Name :- {nrgp_entrys.dpname}\n Service Provide Name:-{nrgp_entrys.spname}\n Description :- {nrgp_entrys.desc}\n Unit :- {nrgp_entrys.unit}\n Quantity  :- {nrgp_entrys.qty}\n Remarks  :- {nrgp_entrys.remarks}
+        # message = f"""Concern Person Name :- {nrgp_entrys.cpname}\n Department Name :- {nrgp_entrys.dpname}\n Service Provide Name:-{nrgp_entrys.spname}\n Description :- {nrgp_entrys.desc}\n Unit :- {nrgp_entrys.unit}\n Quantity  :- {nrgp_entrys.qty}\n Remarks  :- {nrgp_entrys.remarks}
         
-        verify----"{request.get_host()}/nrgp_approve_link/{pk}/1"
+        # verify----"{request.get_host()}/nrgp_approve_link/{pk}/1"
 
-        Not Verify----"{request.get_host()}/nrgp_approve_link/{pk}/0"
+        # Not Verify----"{request.get_host()}/nrgp_approve_link/{pk}/0"
         
-        """
+        # """
+        # email_from = settings.EMAIL_HOST_USER
+        # recipient_list = [request.POST['email']]
+        # send_mail(subject, message, email_from, recipient_list)
+        verify = f"{request.get_host()}/nrgp_approve_link/{pk}/1"
+        notverify = f"{request.get_host()}/nrgp_approve_link/{pk}/0"
+        content = {
+            "verify": verify,
+            "notverify": notverify,
+            "pname": nrgp_entrys.cpname,
+            "dname": nrgp_entrys.dpname,
+            "sname": nrgp_entrys.spname,
+            "desc": nrgp_entrys.desc,
+            "unit": nrgp_entrys.unit,
+            "qty": nrgp_entrys.qty,
+            "remarks": nrgp_entrys.remarks,
+            "va": "APPROVE",
+            "va1": "NOT APPROVE"
+        }
+
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [request.POST['email']]
-        send_mail(subject, message, email_from, recipient_list)
+        html_content = render_to_string(
+            "rgp_verify.html", content)
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            subject, text_content, email_from, recipient_list)
+        email.attach_alternative(html_content, "text/html")
+        email.send()
         msg = "E-Mail Sent Successfully"
         approver_email = User_rgp.objects.get(email=request.POST['email'])
         nrgp_entrys.nrgp_approver = approver_email
