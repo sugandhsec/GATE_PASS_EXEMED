@@ -65,6 +65,7 @@
 							<div class="form-group">
 								<select name="email">
 									{% for i in user_data %}
+									{% %}
 									<option>{{i.email}}</option>
 									{% endfor %}
 								</select>

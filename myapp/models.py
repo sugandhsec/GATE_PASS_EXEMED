@@ -16,7 +16,14 @@ dept = (
     ("admin", "admin"),
     ("HR", "HR"),
     ("QA", "QA"),
-    ("QC", "QC")
+    ("QC", "QC"),
+    ("PH", "PH"),
+    ("WH", "WH"),
+    ("ENGG", "ENGG"),
+    ("API", "API"),
+    ("ADL", "ADL"),
+    ("EOHS", "EOHS"),
+    ("IT", "IT")
 )
 
 # Create your models here.

@@ -66,7 +66,7 @@ def login(request):
                 password=request.POST['password']
 
             )
-            if user.usertype == "manager":
+            if user.usertype == "manager" or user.usertype == "verifier":
                 request.session['email'] = user.email
                 request.session['fname'] = user.fname
                 request.session['dname'] = user.department
@@ -237,7 +237,8 @@ def rgp_view_operator(request):
 
 
 def rgp_exit(request, pk):
-    all_in_user = Rgp_entry.objects.filter(current_status="Entry")
+    all_in_user = Rgp_entry.objects.filter(
+        current_status="Entry", rgp_created__department=request.session['dname'])
     if request.method == "POST":
         rgp_entrys = Rgp_entry.objects.get(id=pk)
         rgp_entrys.current_status = "Exit"
@@ -250,7 +251,8 @@ def rgp_exit(request, pk):
 
 
 def nrgp_exit(request, pk):
-    all_in_user = Nrgp_entry.objects.filter(current_status="Entry")
+    all_in_user = Nrgp_entry.objects.filter(
+        current_status="Entry", nrgp_created__department=request.session['dname'])
     if request.method == "POST":
         nrgp_entrys = Nrgp_entry.objects.get(id=pk)
         nrgp_entrys.current_status = "Exit"
@@ -351,10 +353,11 @@ def nrgp_verify_link(request, pk, status):
 
 
 def send_email_verify(request, pk):
-    # user_data = User_rgp.objects.get(usertype="verifier")
-    user_data = User_rgp.objects.all()
+    user_data = User_rgp.objects.filter(
+        usertype="verifier", department=request.session['dname'])
+    # user_data = User_rgp.objects.all()
     if request.method == "POST":
-        verify =f"{request.get_host()}/verify_link/{pk}/1"
+        verify = f"{request.get_host()}/verify_link/{pk}/1"
         notverify = f"{request.get_host()}/verify_link/{pk}/0"
 
         notverify = f"{request.get_host()}/verify_link/{pk}/0"
@@ -389,8 +392,9 @@ def send_email_verify(request, pk):
 
 
 def nrgp_send_email_verify(request, pk):
-    # user_data = User_rgp.objects.get(usertype="verifier")
-    user_data = User_rgp.objects.all()
+    user_data = User_rgp.objects.filter(
+        usertype="verifier", department=request.session['dname'])
+    # user_data = User_rgp.objects.all()
     if request.method == "POST":
         nrgp_entrys = Nrgp_entry.objects.get(id=pk)
         subject = 'NRGP VERIFY'
@@ -431,8 +435,9 @@ def nrgp_approve_link(request, pk, status):
 
 
 def send_email_approve(request, pk):
-    # user_data = User_rgp.objects.get(usertype="approver")
-    user_data = User_rgp.objects.all()
+    user_data = User_rgp.objects.filter(
+        usertype="approver", department=request.session['dname'])
+    # user_data = User_rgp.objects.all()
     if request.method == "POST":
         rgp_entrys = Rgp_entry.objects.get(id=pk)
         subject = 'RGP APPROVE'
