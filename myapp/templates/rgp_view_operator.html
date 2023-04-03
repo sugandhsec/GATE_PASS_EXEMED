@@ -86,10 +86,22 @@
 					<td>{{i.qty}} </td>
 
 					<td>{{i.remarks}} </td>
+					{% if i.outward_status %}
+					<td><a href="{% url 'rgp_outward' i.id %}"><button type="button" class="primary-btn order-submit"
+								disabled>RGP
+								Outward </button></a> </td>
+					{%else%}
 					<td><a href="{% url 'rgp_outward' i.id %}"><button type="button"
 								class="primary-btn order-submit">RGP
 								Outward </button></a> </td>
+					{%endif%}
 					<td>{{i.outward_status}} </td>
+					{% if i.inward_status%}
+
+					<td><a href="{% url 'rgp_inward' i.id %}"><button type="button" class="primary-btn order-submit"
+								disabled>RGP
+								Inward</button></a> </td>
+					{%else%}
 					{% if i.outward_status %}
 					<td><a href="{% url 'rgp_inward' i.id %}"><button type="button" class="primary-btn order-submit">RGP
 								Inward</button></a> </td>
@@ -98,6 +110,8 @@
 								disabled>RGP
 								Inward</button></a> </td>
 					{% endif %}
+					{% endif %}
+
 					<td>{{i.inward_status}} </td>
 					<td><a href="{% url 'send_email' i.id %}"><button type="button"
 								class="primary-btn order-submit">Send

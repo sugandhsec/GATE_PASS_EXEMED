@@ -51,13 +51,13 @@
 		</div>
 		<center style="color:red">{{msg}}</center>
 	</h4>
-	
+
 	<!-- ----------------temp div-------- -->
 	<div class="table_data">
-		
+
 		<table id="alter">
 			<tr>
-				
+
 				<th>Concern Person Name</th>
 				<th>Department Name</th>
 				<th>Service Provider Name</th>
@@ -68,11 +68,11 @@
 				<th>NRGP Outward</th>
 				<th>Outward Staus</th>
 				<th>Send Mail</th>
-				
+
 			</tr>
 			{% for i in nrgp_entrys %}
 
-			
+
 			<form action="" method="post">
 				{% csrf_token %}
 				<tr>
@@ -82,12 +82,20 @@
 					<td>{{i.desc}} </td>
 					<td>{{i.unit}} </td>
 					<td>{{i.qty}} </td>
-					
+
 					<td>{{i.remarks}} </td>
-					<td><a href="{% url 'nrgp_outward' i.id %}"><button type="button" class="primary-btn order-submit">NRGP
+					{% if i.nrgp_outward_status%}
+					<td><a href="{% url 'nrgp_outward' i.id %}"><button type="button" class="primary-btn order-submit"
+								disabled>NRGP
 								Outward </button></a> </td>
+					{%else%}
+					<td><a href="{% url 'nrgp_outward' i.id %}"><button type="button"
+								class="primary-btn order-submit">NRGP
+								Outward </button></a> </td>
+					{%endif%}
 					<td>{{i.nrgp_outward_status}} </td>
-					<td><a href="{% url 'nrgp_send_email' i.id %}"><button type="button" class="primary-btn order-submit">Send
+					<td><a href="{% url 'nrgp_send_email' i.id %}"><button type="button"
+								class="primary-btn order-submit">Send
 								Mail</button></a> </td>
 					<br>
 					<!-- <div><button onClick="window.print()">Print this page</button></div> -->

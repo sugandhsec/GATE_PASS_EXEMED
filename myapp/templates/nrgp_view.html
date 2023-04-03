@@ -93,11 +93,22 @@
 					<td><a href="{% url 'nrgp_send_email' i.id %}"><button type="button"
 								class="primary-btn order-submit">Send
 								Mail</button></a> </td>
+					{% if i.nrgp_verify_status %}
+					<td><a href="{% url 'nrgp_send_email_verify' i.id %}"><button type="button"
+								class="primary-btn order-submit" disabled>Verify
+								Mail</button></a></td>
+					{% else %}
 					<td><a href="{% url 'nrgp_send_email_verify' i.id %}"><button type="button"
 								class="primary-btn order-submit">Verify
 								Mail</button></a></td>
+					{% endif %}
 					<td>{{i.nrgp_verify_status}}</td>
 					<td>{{i.nrgp_verify_time}}</td>
+					{% if i.nrgp_approve_status %}
+					<td><a href="{% url 'nrgp_send_email_approve' i.id %}"><button type="button"
+								class="primary-btn order-submit" disabled>Approve
+								Mail</button></a></td>
+					{% else %}
 					{% if i.nrgp_verify_status %}
 					<td><a href="{% url 'nrgp_send_email_approve' i.id %}"><button type="button"
 								class="primary-btn order-submit">Approve
@@ -107,9 +118,11 @@
 								class="primary-btn order-submit" disabled>Approve
 								Mail</button></a></td>
 					{% endif %}
+					{% endif %}
 					<td>{{i.nrgp_approve_status}}</td>
 					<td>{{i.nrgp_approve_time}}</td>
-					<td><a href="{% url 'nrgp_print' i.id %}" target="_blank"><button type="button" class="primary-btn">Print</button></a>
+					<td><a href="{% url 'nrgp_print' i.id %}" target="_blank"><button type="button"
+								class="primary-btn">Print</button></a>
 					</td>
 					<br>
 					<!-- <div><button onClick="window.print()">Print this page</button></div> -->

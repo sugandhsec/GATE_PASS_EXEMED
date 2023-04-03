@@ -377,18 +377,18 @@ def send_email_verify(request, pk):
         # send_mail(subject, message, email_from, recipient_list)
         verify = f"{request.get_host()}/verify_link/{pk}/1"
         notverify = f"{request.get_host()}/verify_link/{pk}/0"
-        content ={
+        content = {
             "verify": verify,
-              "notverify": notverify,
-              "pname": rgp_entrys.cpname,
-              "dname":rgp_entrys.dpname,
-              "sname": rgp_entrys.spname,
-              "desc":rgp_entrys.desc,
-              "unit": rgp_entrys.unit,
-              "qty":rgp_entrys.qty,
-              "remarks": rgp_entrys.remarks,
-              "va":"VERIFY",
-              "va1":"NOT VERIFY"
+            "notverify": notverify,
+            "pname": rgp_entrys.cpname,
+            "dname": rgp_entrys.dpname,
+            "sname": rgp_entrys.spname,
+            "desc": rgp_entrys.desc,
+            "unit": rgp_entrys.unit,
+            "qty": rgp_entrys.qty,
+            "remarks": rgp_entrys.remarks,
+            "va": "VERIFY",
+            "va1": "NOT VERIFY"
         }
 
         email_from = settings.EMAIL_HOST_USER
@@ -419,11 +419,11 @@ def nrgp_send_email_verify(request, pk):
         nrgp_entrys = Nrgp_entry.objects.get(id=pk)
         subject = 'NRGP VERIFY'
         # message = f"""Concern Person Name :- {nrgp_entrys.cpname}\n Department Name :- {nrgp_entrys.dpname}\n Service Provide Name:-{nrgp_entrys.spname}\n Description :- {nrgp_entrys.desc}\n Unit :- {nrgp_entrys.unit}\n Quantity  :- {nrgp_entrys.qty}\n Remarks  :- {nrgp_entrys.remarks}
-        
+
         # verify----"{request.get_host()}/nrgp_verify_link/{pk}/1"
 
         # Not Verify----"{request.get_host()}/nrgp_verify_link/{pk}/0"
-        
+
         # """
         # email_from = settings.EMAIL_HOST_USER
         # recipient_list = [request.POST['email']]
@@ -481,17 +481,17 @@ def nrgp_approve_link(request, pk, status):
 
 def send_email_approve(request, pk):
     user_data = User_rgp.objects.filter(
-        usertype="approver", department=request.session['dname'])
+        usertype="approver")
     # user_data = User_rgp.objects.all()
     if request.method == "POST":
         rgp_entrys = Rgp_entry.objects.get(id=pk)
         subject = 'RGP APPROVE'
         # message = f"""Concern Person Name :- {rgp_entrys.cpname}\n Department Name :- {rgp_entrys.dpname}\n Service Provide Name:-{rgp_entrys.spname}\n Description :- {rgp_entrys.desc}\n Unit :- {rgp_entrys.unit}\n Quantity  :- {rgp_entrys.qty}\n Remarks  :- {rgp_entrys.remarks}
-        
+
         # verify----"{request.get_host()}/approve_link/{pk}/1"
 
         # Not Verify----"{request.get_host()}/approve_link/{pk}/0"
-        
+
         # """
         # email_from = settings.EMAIL_HOST_USER
         # recipient_list = [request.POST['email']]
@@ -508,8 +508,8 @@ def send_email_approve(request, pk):
             "unit": rgp_entrys.unit,
             "qty": rgp_entrys.qty,
             "remarks": rgp_entrys.remarks,
-              "va":"APPROVE",
-              "va1":"NOT APPROVE"
+            "va": "APPROVE",
+            "va1": "NOT APPROVE"
         }
 
         email_from = settings.EMAIL_HOST_USER
@@ -533,16 +533,18 @@ def send_email_approve(request, pk):
 
 def nrgp_send_email_approve(request, pk):
     # user_data = User_rgp.objects.get(usertype="approver")
-    user_data = User_rgp.objects.all()
+    # user_data = User_rgp.objects.all()
+    user_data = User_rgp.objects.filter(
+        usertype="approver")
     if request.method == "POST":
         nrgp_entrys = Nrgp_entry.objects.get(id=pk)
         subject = 'NRGP APPROVE'
         # message = f"""Concern Person Name :- {nrgp_entrys.cpname}\n Department Name :- {nrgp_entrys.dpname}\n Service Provide Name:-{nrgp_entrys.spname}\n Description :- {nrgp_entrys.desc}\n Unit :- {nrgp_entrys.unit}\n Quantity  :- {nrgp_entrys.qty}\n Remarks  :- {nrgp_entrys.remarks}
-        
+
         # verify----"{request.get_host()}/nrgp_approve_link/{pk}/1"
 
         # Not Verify----"{request.get_host()}/nrgp_approve_link/{pk}/0"
-        
+
         # """
         # email_from = settings.EMAIL_HOST_USER
         # recipient_list = [request.POST['email']]

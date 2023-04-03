@@ -98,10 +98,22 @@
 					<td><a href="{% url 'send_email' i.id %}"><button type="button"
 								class="primary-btn order-submit">Send
 								Mail</button></a> </td>
+					{% if i.verify_status %}
 					<td><a href="{% url 'send_email_verify' i.id %}"><button type="button"
-								class="primary-btn order-submit">Verify Mail</button></a></td>
+								class="primary-btn order-submit" disabled>Verify Mail</button></a></td>
+					{% else%}
+					<td><a href="{% url 'send_email_verify' i.id %}"><button type="button"
+								class="primary-btn order-submit">Verify
+								Mail</button></a></td>
+					{% endif %}
 					<td>{{i.verify_status}}</td>
 					<td>{{i.rgp_verify_time}}</td>
+					
+					{% if i.approve_status%}
+					<td><a href="{% url 'send_email_approve' i.id %}"><button type="button"
+								class="primary-btn order-submit" disabled>Approve
+								Mail</button></a></td>
+					{% else %}
 					{% if i.verify_status %}
 					<td><a href="{% url 'send_email_approve' i.id %}"><button type="button"
 								class="primary-btn order-submit">Approve Mail</button></a></td>
@@ -110,6 +122,9 @@
 								class="primary-btn order-submit" disabled>Approve
 								Mail</button></a></td>
 					{% endif %}
+					{% endif %}
+
+
 					<td>{{i.approve_status}}</td>
 					<td>{{i.rgp_approve_time}}</td>
 
