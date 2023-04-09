@@ -108,7 +108,7 @@
 					{% endif %}
 					<td>{{i.verify_status}}</td>
 					<td>{{i.rgp_verify_time}}</td>
-					
+
 					{% if i.approve_status%}
 					<td><a href="{% url 'send_email_approve' i.id %}"><button type="button"
 								class="primary-btn order-submit" disabled>Approve

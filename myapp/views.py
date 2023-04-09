@@ -72,6 +72,8 @@ def login(request):
                 request.session['dname'] = user.department
             # request.session['profile_pic']=user.profile_pic.url
                 return render(request, 'in.html')
+            elif user.usertype == "admin":
+                return render(request, 'admin_page.html')
             else:
                 request.session['email'] = user.email
                 request.session['fname'] = user.fname
@@ -334,19 +336,33 @@ def nrgp_send_email(request, pk):
         return render(request, 'nrgp_send_email.html', {'nrgp_entrys': nrgp_entrys})
 
 
-def verify_link(request, pk, status):
+def verify_link(request,ver, pk, status):
     rgp_data = Rgp_entry.objects.get(id=pk)
+    verifier_per=User_rgp.objects.get(id=ver)
     rgp_data.verify_status = bool(status)
-    rgp_data.rgp_verify_time = timezone.now()
-    rgp_data.save()
+    if status == 1:
+        rgp_data.rgp_verify_time = timezone.now()
+        rgp_data.verifier=verifier_per
+        rgp_data.save()
+    elif status==0:
+        rgp_data.rgp_verify_time = None
+        rgp_data.verifier = None
+        rgp_data.save()
     return render(request, "index.html")
 
 
-def nrgp_verify_link(request, pk, status):
+def nrgp_verify_link(request,ver, pk, status):
     rgp_data = Nrgp_entry.objects.get(id=pk)
+    verifier_per = User_rgp.objects.get(id=ver)
     rgp_data.nrgp_verify_status = bool(status)
-    rgp_data.nrgp_verify_time = timezone.now()
-    rgp_data.save()
+    if status == 1:
+        rgp_data.nrgp_verify_time = timezone.now()
+        rgp_data.nrgp_verifier = verifier_per
+        rgp_data.save()
+    elif status == 0:
+        rgp_data.nrgp_verify_time = None
+        rgp_data.nrgp_verifier = None
+        rgp_data.save()
     return render(request, "index.html")
 
 # <a href=f"{request.get_host()}/verify_link/{pk}/1"><button>Verify<button></a>
@@ -375,8 +391,10 @@ def send_email_verify(request, pk):
 
         # """
         # send_mail(subject, message, email_from, recipient_list)
-        verify = f"{request.get_host()}/verify_link/{pk}/1"
-        notverify = f"{request.get_host()}/verify_link/{pk}/0"
+        sel = User_rgp.objects.get(email=request.POST['email'])
+        ver=sel.id
+        verify = f"{request.get_host()}/verify_link/{ver}/{pk}/1"
+        notverify = f"{request.get_host()}/verify_link/{ver}/{pk}/0"
         content = {
             "verify": verify,
             "notverify": notverify,
@@ -402,9 +420,9 @@ def send_email_verify(request, pk):
         email.send()
 
         msg = "E-Mail Sent Successfully"
-        verifier_email = User_rgp.objects.get(email=request.POST['email'])
-        rgp_entrys.verifier = verifier_email
-        rgp_entrys.save()
+        # verifier_email = User_rgp.objects.get(email=request.POST['email'])
+        # rgp_entrys.verifier = verifier_email
+        # rgp_entrys.save()
         return render(request, 'send_email_verify.html', {'rgp_entrys': rgp_entrys, 'msg': msg, 'user_data': user_data})
     else:
         rgp_entrys = Rgp_entry.objects.get(id=pk)
@@ -428,8 +446,10 @@ def nrgp_send_email_verify(request, pk):
         # email_from = settings.EMAIL_HOST_USER
         # recipient_list = [request.POST['email']]
         # send_mail(subject, message, email_from, recipient_list)
-        verify = f"{request.get_host()}/nrgp_verify_link/{pk}/1"
-        notverify = f"{request.get_host()}/nrgp_verify_link/{pk}/0"
+        sel = User_rgp.objects.get(email=request.POST['email'])
+        ver = sel.id
+        verify = f"{request.get_host()}/nrgp_verify_link/{ver}/{pk}/1"
+        notverify = f"{request.get_host()}/nrgp_verify_link/{ver}/{pk}/0"
         content = {
             "verify": verify,
             "notverify": notverify,
@@ -454,28 +474,42 @@ def nrgp_send_email_verify(request, pk):
         email.attach_alternative(html_content, "text/html")
         email.send()
         msg = "E-Mail Sent Successfully"
-        verifier_email = User_rgp.objects.get(email=request.POST['email'])
-        nrgp_entrys.nrgp_verifier = verifier_email
-        nrgp_entrys.save()
+        # verifier_email = User_rgp.objects.get(email=request.POST['email'])
+        # nrgp_entrys.nrgp_verifier = verifier_email
+        # nrgp_entrys.save()
         return render(request, 'nrgp_send_email_verify.html', {'nrgp_entrys': nrgp_entrys, 'msg': msg, 'user_data': user_data})
     else:
         nrgp_entrys = Nrgp_entry.objects.get(id=pk)
         return render(request, 'nrgp_send_email_verify.html', {'nrgp_entrys': nrgp_entrys, 'user_data': user_data})
 
 
-def approve_link(request, pk, status):
+def approve_link(request,apr, pk, status):
     rgp_data = Rgp_entry.objects.get(id=pk)
+    apr_per = User_rgp.objects.get(id=apr)
     rgp_data.approve_status = bool(status)
-    rgp_data.rgp_approve_time = timezone.now()
-    rgp_data.save()
+    if status == 1:
+        rgp_data.rgp_approve_time = timezone.now()
+        rgp_data.approver = apr_per
+        rgp_data.save()
+    elif status == 0:
+        rgp_data.rgp_approve_time = None
+        rgp_data.approver = None
+        rgp_data.save()
     return render(request, "index.html")
 
 
-def nrgp_approve_link(request, pk, status):
+def nrgp_approve_link(request,apr, pk, status):
     rgp_data = Nrgp_entry.objects.get(id=pk)
+    apr_per = User_rgp.objects.get(id=apr)
     rgp_data.nrgp_approve_status = bool(status)
-    rgp_data.nrgp_approve_time = timezone.now()
-    rgp_data.save()
+    if status == 1:
+        rgp_data.nrgp_approve_time = timezone.now()
+        rgp_data.nrgp_approver = apr_per
+        rgp_data.save()
+    elif status == 0:
+        rgp_data.nrgp_approve_time = None
+        rgp_data.nrgp_approver = None
+        rgp_data.save()
     return render(request, "index.html")
 
 
@@ -496,8 +530,10 @@ def send_email_approve(request, pk):
         # email_from = settings.EMAIL_HOST_USER
         # recipient_list = [request.POST['email']]
         # send_mail(subject, message, email_from, recipient_list)
-        verify = f"{request.get_host()}/approve_link/{pk}/1"
-        notverify = f"{request.get_host()}/approve_link/{pk}/0"
+        sel = User_rgp.objects.get(email=request.POST['email'])
+        apr = sel.id
+        verify = f"{request.get_host()}/approve_link/{apr}/{pk}/1"
+        notverify = f"{request.get_host()}/approve_link/{apr}/{pk}/0"
         content = {
             "verify": verify,
             "notverify": notverify,
@@ -522,9 +558,9 @@ def send_email_approve(request, pk):
         email.attach_alternative(html_content, "text/html")
         email.send()
         msg = "E-Mail Sent Successfully"
-        approver_email = User_rgp.objects.get(email=request.POST['email'])
-        rgp_entrys.approver = approver_email
-        rgp_entrys.save()
+        # approver_email = User_rgp.objects.get(email=request.POST['email'])
+        # rgp_entrys.approver = approver_email
+        # rgp_entrys.save()
         return render(request, 'send_email_approve.html', {'rgp_entrys': rgp_entrys, 'msg': msg, 'user_data': user_data})
     else:
         rgp_entrys = Rgp_entry.objects.get(id=pk)
@@ -549,8 +585,10 @@ def nrgp_send_email_approve(request, pk):
         # email_from = settings.EMAIL_HOST_USER
         # recipient_list = [request.POST['email']]
         # send_mail(subject, message, email_from, recipient_list)
-        verify = f"{request.get_host()}/nrgp_approve_link/{pk}/1"
-        notverify = f"{request.get_host()}/nrgp_approve_link/{pk}/0"
+        sel = User_rgp.objects.get(email=request.POST['email'])
+        apr = sel.id
+        verify = f"{request.get_host()}/nrgp_approve_link/{apr}/{pk}/1"
+        notverify = f"{request.get_host()}/nrgp_approve_link/{apr}/{pk}/0"
         content = {
             "verify": verify,
             "notverify": notverify,
