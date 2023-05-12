@@ -82,6 +82,7 @@ class Rgp_entry(models.Model):
 
 
 class Nrgp_entry(models.Model):
+    nrgp_main_serial=models.CharField(null=True,default=0,max_length=20)
     nrgp_serial = models.CharField(max_length=20, null=True)
     nrgp_created = models.ForeignKey(
         User_rgp, on_delete=models.CASCADE, null=True)

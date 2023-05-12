@@ -146,12 +146,14 @@ def rgp_signup(request):
 def nrgp_signup(request):
     user = User_rgp.objects.get(email=request.session['email'])
     if request.method == "POST":
+        main_series=main_series_generate(request)
         descript = request.POST.getlist('desc')
         quantity = request.POST.getlist('qty')
         unit = request.POST.getlist('unit')
         for i in range(0, len(descript)):
             series = serial_generate_nrgp(request)
             Nrgp_entry.objects.create(
+                nrgp_main_serial=main_series,
                 nrgp_serial=series,
                 nrgp_created=user,
                 cpname=request.POST['cpname'],
@@ -719,6 +721,18 @@ def serial_generate(request):
         return str(var4)+"-"+str(now.year)
     except:
         var3 = "1"+"-"+str(now.year)
+        return var3
+
+
+def main_series_generate(request):
+    now = datetime.datetime.now()
+    try:
+        latest = Rgp_entry.objects.last()
+        var3 = latest.nrgp_main_serial
+        var4 = int(var3)+1
+        return str(var4)
+    except:
+        var3 = "1"
         return var3
 
 

@@ -56,6 +56,7 @@
   <!-- hr tag for horizontal line-->
   <table id="alter">
     <tr>
+      <th>Main Sno.</th>
       <th>Sno.</th>
       <th>Concern Person Name</th>
       <th>Department Name</th>
@@ -81,6 +82,7 @@
     {% for i in log_data %}
 
     <tr>
+      <td>{{i.nrgp_main_serial}}</td>
       <td>{{i.nrgp_serial}}</td>
       <td>{{i.cpname}}</td>
       <td>{{i.dpname}}</td>
