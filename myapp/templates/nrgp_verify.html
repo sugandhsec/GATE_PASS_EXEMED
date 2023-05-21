@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            border: 1px solid black;
+            /* adds a solid black border around the table */
+            width: 100%;
+            /* sets the width of the table to 100% of its container */
+        }
+
+        td {
+            padding: 10px;
+            /* adds 10 pixels of padding to all table cells */
+            border: 1px solid black;
+            /* adds a solid black border around all table cells */
+        }
+    </style>
+</head>
+
+<body>
+    <table cellspacing="5">
+        <tr>
+            <td>Concern Person Name :</td>
+            <td>{{pname}}</td>
+        </tr>
+        <tr>
+            <td>Department Name</td>
+            <td>{{dname}}</td>
+        </tr>
+        <tr>
+            <td>Service Provide Name</td>
+            <td>{{sname}}</td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>{{desc}}</td>
+        </tr>
+        <tr>
+            <td>Unit</td>
+            <td>{{unit}}</td>
+        </tr>
+        <tr>
+            <td>Quantity</td>
+            <td>{{qty}}</td>
+        </tr>
+        <tr>
+            <td>Remarks</td>
+            <td>{{remarks}}</td>
+        </tr>
+        <tr>
+            <td>{{verify}}</td>
+            <td><a href="{{verify}}">VERIFY</a>
+        </tr>
+        </td>
+        <tr>
+            <td>{{notverify}}</td>
+            <td><a href="{{notverify}}">NOT VERIFY</a></td>
+        </tr>
+        <tr>
+            <td>{{verify_all}}</td>
+            <td><a href="{{verify_all}}">Verify_ALL</a></td>
+        </tr>
+    </table>
+</body>
+
+</html>

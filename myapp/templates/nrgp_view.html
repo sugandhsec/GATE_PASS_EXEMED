@@ -96,27 +96,27 @@
 								class="primary-btn order-submit">Send
 								Mail</button></a> </td>
 					{% if i.nrgp_verify_status %}
-					<td><a href="{% url 'nrgp_send_email_verify' i.id %}"><button type="button"
+					<td><a href="{% url 'nrgp_send_email_verify' i.id i.nrgp_main_serial%}"><button type="button"
 								class="primary-btn order-submit" disabled>Verify
 								Mail</button></a></td>
 					{% else %}
-					<td><a href="{% url 'nrgp_send_email_verify' i.id %}"><button type="button"
+					<td><a href="{% url 'nrgp_send_email_verify' i.id i.nrgp_main_serial %}"><button type="button"
 								class="primary-btn order-submit">Verify
 								Mail</button></a></td>
 					{% endif %}
 					<td>{{i.nrgp_verify_status}}</td>
 					<td>{{i.nrgp_verify_time}}</td>
 					{% if i.nrgp_approve_status %}
-					<td><a href="{% url 'nrgp_send_email_approve' i.id %}"><button type="button"
+					<td><a href="{% url 'nrgp_send_email_approve' i.id i.nrgp_main_serial %}"><button type="button"
 								class="primary-btn order-submit" disabled>Approve
 								Mail</button></a></td>
 					{% else %}
 					{% if i.nrgp_verify_status %}
-					<td><a href="{% url 'nrgp_send_email_approve' i.id %}"><button type="button"
+					<td><a href="{% url 'nrgp_send_email_approve' i.id i.nrgp_main_serial  %}"><button type="button"
 								class="primary-btn order-submit">Approve
 								Mail</button></a></td>
 					{% else %}
-					<td><a href="{% url 'nrgp_send_email_approve' i.id %}"><button type="button"
+					<td><a href="{% url 'nrgp_send_email_approve' i.id i.nrgp_main_serial %}"><button type="button"
 								class="primary-btn order-submit" disabled>Approve
 								Mail</button></a></td>
 					{% endif %}
