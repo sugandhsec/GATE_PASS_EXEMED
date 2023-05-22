@@ -436,33 +436,34 @@ def nrgp_send_email_verify(request, pk, vid):
         subject = 'NRGP VERIFY'
         sel = User_rgp.objects.get(email=request.POST['email'])
         ver = sel.id
+        content = {}
         for i in id_data:
             verify = f"{request.get_host()}/nrgp_verify_link/{ver}/{i.id}/1"
             notverify = f"{request.get_host()}/nrgp_verify_link/{ver}/{i.id}/0"
             verify_all = f"{request.get_host()}/nrgp_verify_link_all/{ver}/{vid}/1"
-            content = {
-                "verify": verify,
-                "notverify": notverify,
-                "verify_all": verify_all,
-                "pname": i.cpname,
-                "dname": i.dpname,
-                "sname": i.spname,
-                "desc": i.desc,
-                "unit": i.unit,
-                "qty": i.qty,
-                "remarks": i.remarks,
-                "va": "VERIFY",
-                "va1": "NOT VERIFY"
-            }
-            email_from = settings.EMAIL_HOST_USER
-            recipient_list = [request.POST['email']]
-            html_content = render_to_string(
-                "nrgp_verify.html", content)
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                subject, text_content, email_from, recipient_list)
-            email.attach_alternative(html_content, "text/html")
-            email.send()
+            content.update({i.id: {"id": i.id,
+                                   "verify": verify,
+                                   "notverify": notverify,
+                                   "verify_all": verify_all,
+                                   "pname": i.cpname,
+                                   "dname": i.dpname,
+                                   "sname": i.spname,
+                                   "desc": i.desc,
+                                   "unit": i.unit,
+                                   "qty": i.qty,
+                                   "remarks": i.remarks,
+                                   "va": "VERIFY",
+                                   "va1": "NOT VERIFY"}
+                            })
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [request.POST['email']]
+        html_content = render_to_string(
+            "nrgp_verify.html", {"content": content})
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            subject, text_content, email_from, recipient_list)
+        email.attach_alternative(html_content, "text/html")
+        email.send()
         msg = "E-Mail Sent Successfully"
         return render(request, 'nrgp_send_email_verify.html', {'nrgp_entrys': nrgp_entrys, 'msg': msg, 'user_data': user_data, "id_data": id_data})
     else:
@@ -567,11 +568,13 @@ def nrgp_send_email_approve(request, pk, vid):
         subject = 'NRGP APPROVE'
         sel = User_rgp.objects.get(email=request.POST['email'])
         apr = sel.id
+        content = {}
         for i in id_data:
             verify = f"{request.get_host()}/nrgp_approve_link/{apr}/{i.id}/1"
             notverify = f"{request.get_host()}/nrgp_approve_link/{apr}/{i.id}/0"
             verify_all = f"{request.get_host()}/nrgp_approve_link_all/{apr}/{vid}/1"
-            content = {
+            content.update({i.id: {
+                "id": i.id,
                 "verify": verify,
                 "notverify": notverify,
                 "verify_all": verify_all,
@@ -584,16 +587,16 @@ def nrgp_send_email_approve(request, pk, vid):
                 "remarks": i.remarks,
                 "va": "APPROVE",
                 "va1": "NOT APPROVE"
-            }
-            email_from = settings.EMAIL_HOST_USER
-            recipient_list = [request.POST['email']]
-            html_content = render_to_string(
-                "nrgp_verify.html", content)
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                subject, text_content, email_from, recipient_list)
-            email.attach_alternative(html_content, "text/html")
-            email.send()
+            }})
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [request.POST['email']]
+        html_content = render_to_string(
+            "nrgp_approve.html", {"content": content})
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            subject, text_content, email_from, recipient_list)
+        email.attach_alternative(html_content, "text/html")
+        email.send()
         msg = "E-Mail Sent Successfully"
         approver_email = User_rgp.objects.get(email=request.POST['email'])
         nrgp_entrys.nrgp_approver = approver_email
