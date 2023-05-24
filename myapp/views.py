@@ -633,8 +633,10 @@ def nrgp_all(request):
 
 
 def nrgp_print(request, pk):
-    user_detail = Nrgp_entry.objects.get(id=pk)
-    return render(request, 'nrgp_print.html', {'user_detail': user_detail})
+    user_detail = Nrgp_entry.objects.filter(nrgp_main_serial=pk)
+    single_data = Nrgp_entry.objects.filter(nrgp_main_serial=pk).last()
+
+    return render(request, 'nrgp_print.html', {'user_detail': user_detail, "single_data": single_data})
 
 
 def rgp_outward(request, pk):

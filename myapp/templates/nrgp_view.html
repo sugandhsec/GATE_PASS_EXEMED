@@ -123,7 +123,7 @@
 					{% endif %}
 					<td>{{i.nrgp_approve_status}}</td>
 					<td>{{i.nrgp_approve_time}}</td>
-					<td><a href="{% url 'nrgp_print' i.id %}" target="_blank"><button type="button"
+					<td><a href="{% url 'nrgp_print' i.nrgp_main_serial %}" target="_blank"><button type="button"
 								class="primary-btn">Print</button></a>
 					</td>
 					<br>

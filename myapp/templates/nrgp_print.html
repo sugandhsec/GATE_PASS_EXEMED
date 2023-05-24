@@ -59,33 +59,32 @@
       <th colspan="5">DELIVERY CHALLAN CUM NON RETURNABLE GATE PASS
 
       </th>
-      <!-- <td colspan="2"></td>      <!--colspan for column merge & rowspan for row merge-->
-      <!-- <td>weakup</td> - --> -->
     </tr>
+
     <tr> <!--3 Row-->
-      <td>{{user_detail.nrgp_main_serial}}</td>
-      <td colspan="2">N. R. G. P. No:-{{user_detail.nrgp_serial}}
+      <!-- <td>{{i.nrgp_main_serial}}</td>-->
+        <td colspan="2">MAIN SERIAL No:-{{single_data.nrgp_main_serial}}
 
       </td>
-      <td colspan="3">Date & Time:- {{user_detail.date}}
+      <td colspan="4">Date & Time:- {{single_data.date}}
 
       </td>
 
 
     </tr>
     <tr> <!--4 Row-->
-      <td colspan="5">NAME OF THE CONCERN PERSON :- {{user_detail.cpname}}
+      <td colspan="5">NAME OF THE CONCERN PERSON :- {{single_data.cpname}}
 
       </td>
 
     </tr>
     <tr> <!--5 Row-->
-      <td colspan="5">NAME OF THE DEPARTMENT :- {{user_detail.dpname}}
+      <td colspan="5">NAME OF THE DEPARTMENT :- {{single_data.dpname}}
 
       </td>
     </tr>
     <tr> <!--6 Row--> <!-- align="center" for text alignment in row and column also can whole table alignment  -->
-      <td colspan="5">SERVICE PROVIDER NAME:- {{user_detail.spname}}
+      <td colspan="5">SERVICE PROVIDER NAME:- {{single_data.spname}}
 
       </td>
     </tr>
@@ -96,24 +95,26 @@
       <th>QTY.</th>
       <th>REMARKS</th>
       <!-- <td>Science</td>
-            <td>Science</td> -->
+        <td>Science</td> -->
     </tr>
+    {% for i in user_detail %}
     <tr> <!--8 Row-->
-      <th></th>
-      <th>{{user_detail.desc}}</th>
-      <th>{{user_detail.unit}}</th>
-      <th>{{user_detail.qty}}</th>
-      <th>{{user_detail.remarks}}</th>
+      <th>{{i.nrgp_serial}}</th>
+      <th>{{i.desc}}</th>
+      <th>{{i.unit}}</th>
+      <th>{{i.qty}}</th>
+      <th>{{i.remarks}}</th>
     </tr>
+    {% endfor %}
     <tr> <!--8 Row-->
-      <td colspan="2">Prepared By:-{{user_detail.nrgp_created.fname}} {{user_detail.nrgp_created.lname}}
+      <td colspan="2">Prepared By:-{{single_data.nrgp_created.fname}} {{single_data.nrgp_created.lname}}
 
       </td>
-      <td colspan="1">Verified By:-{{user_detail.nrgp_verifier.fname}} {{user_detail.nrgp_verifier.lname}}
+      <td colspan="1">Verified By:-{{single_data.nrgp_verifier.fname}} {{single_data.nrgp_verifier.lname}}
 
       </td>
-      <td colspan="2">Approved By:-{{user_detail.nrgp_approver.fname}} {{user_detail.nrgp_approver.lname}}
-      
+      <td colspan="2">Approved By:-{{single_data.nrgp_approver.fname}} {{single_data.nrgp_approver.lname}}
+
       </td>
     </tr>
 
